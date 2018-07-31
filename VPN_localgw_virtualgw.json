@@ -2,52 +2,37 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "Project_Name": {
+    "project-name": {
       "defaultValue": "itvt-web-app",
+      "type": "string"
+    },
+    "pip-name": {
+      "defaultValue": "[concat(parameters('project-name'),'-vgw-pip')]",
       "type": "string"
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "VNet_Name": "[concat(parameters('Project_Name'),'-vnet')]",
+    "VNet_Name": "[concat(parameters('project-name'),'-vnet')]",
     "VirtualGW": {
-      "Name": "[concat(parameters('Project_Name'),'-vgw')]",
-      "PublicIP_Name": "[concat(parameters('Project_Name'),'-vgw-pip')]",
+      "Name": "[concat(parameters('project-name'),'-vgw')]",
+      "PublicIP_Name": "[parameters('pip-name')]",
       "sku": {
         "name": "VpnGw1",
         "tier": "VpnGw1"
       }
     },
     "LocalGW": {
-      "Name": "[concat(parameters('Project_Name'),'-lgw')]",
+      "Name": "[concat(parameters('project-name'),'-lgw')]",
       "addressPrefixes": "10.6.20.0/24",
-      "gatewayIpAddress": "188.129.16.93"
+      "gatewayIpAddress": "185.121.96.93"
     },
     "Connection": {
-      "Name": "[concat(parameters('Project_Name'),'-vgw-lgw')]",
+      "Name": "[concat(parameters('project-name'),'-vgw-lgw')]",
       "sharedKey": "!qaz2wsx3edc$rfv5tgb"
     }
   },
   "resources": [
-    {
-      "comments": "Create public IP address for the VPN gateway",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "sku": {
-        "name": "Basic",
-        "tier": "Regional"
-      },
-      "name": "[variables('VirtualGW').PublicIP_Name]",
-      "apiVersion": "2018-02-01",
-      "location": "[variables('location')]",
-      "scale": null,
-      "properties": {
-        "publicIPAddressVersion": "IPv4",
-        "publicIPAllocationMethod": "Dynamic",
-        "idleTimeoutInMinutes": 4,
-        "ipTags": []
-      },
-      "dependsOn": []
-    },
     {
       "comments": "Create Virtual Network Gateway",
       "type": "Microsoft.Network/virtualNetworkGateways",
@@ -89,7 +74,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses', variables('VirtualGW').PublicIP_Name)]" //,
+        //"[resourceId('Microsoft.Network/publicIPAddresses', variables('VirtualGW').PublicIP_Name)]" //,
         //"[concat('Microsoft.Network/virtualNetworks/', variables('VNet_Name'))]"
       ]
     },

@@ -1,0 +1,36 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "pip-name": {
+      "type": "string",
+      "defaultValue": "pip"
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+      "comments": "Create public IP address for the VPN gateway",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "name": "[parameters('pip-name')]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      },
+      "dependsOn": []
+    }
+  ],
+  "outputs": {
+  }
+}
