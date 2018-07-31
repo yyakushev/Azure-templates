@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "Project_Name": {
+    "nsg-name": {
       "defaultValue": "itvt-web-app",
       "type": "string"
     },
@@ -24,14 +24,13 @@
     }
   },
   "variables": {
-    "NetworSecurityGroup_Name": "[concat(parameters('Project_Name'),'-nsg')]",
     "location": "[resourceGroup().location]"
   },
   "resources": [
     {
       "comments": "Creating the NSG for the project",
       "type": "Microsoft.Network/networkSecurityGroups",
-      "name": "[variables('NetworSecurityGroup_Name')]",
+      "name": "[parameters('nsg-name')]",
       "apiVersion": "2018-02-01",
       "location": "[variables('location')]",
       "scale": null,
