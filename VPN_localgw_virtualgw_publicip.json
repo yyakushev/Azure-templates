@@ -1,0 +1,146 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Project_Name": {
+      "defaultValue": "itvt-web-app",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "VNet_Name": "[concat(parameters('Project_Name'),'-vnet')]",
+    "VirtualGW": {
+      "Name": "[concat(parameters('Project_Name'),'-vgw')]",
+      "PublicIP_Name": "[concat(parameters('Project_Name'),'-vgw-pip')]",
+      "sku": {
+        "name": "VpnGw1",
+        "tier": "VpnGw1"
+      }
+    },
+    "LocalGW": {
+      "Name": "[concat(parameters('Project_Name'),'-lgw')]",
+      "addressPrefixes": "10.6.20.0/24",
+      "gatewayIpAddress": "188.129.16.93"
+    },
+    "Connection": {
+      "Name": "[concat(parameters('Project_Name'),'-vgw-lgw')]",
+      "sharedKey": "!qaz2wsx3edc$rfv5tgb"
+    }
+  },
+  "resources": [
+    {
+      "comments": "Create public IP address for the VPN gateway",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "name": "[variables('VirtualGW').PublicIP_Name]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      },
+      "dependsOn": []
+    },
+    {
+      "comments": "Create Virtual Network Gateway",
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "name": "[variables('VirtualGW').Name]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "default",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('VirtualGW').PublicIP_Name)]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('VNet_Name'), 'GatewaySubnet')]"
+              }
+            }
+          }
+        ],
+        "sku": {
+          "name": "[variables('VirtualGW').sku.name]",
+          "tier": "[variables('VirtualGW').sku.tier]"
+        },
+        "gatewayType": "Vpn",
+        "vpnType": "RouteBased",
+        "enableBgp": false,
+        "activeActive": false,
+        "vpnClientConfiguration": {
+          "vpnClientProtocols": [
+            "SSTP",
+            "IkeV2"
+          ],
+          "vpnClientRootCertificates": [],
+          "vpnClientRevokedCertificates": [],
+          "vpnClientIpsecPolicies": []
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('VirtualGW').PublicIP_Name)]" //,
+        //"[concat('Microsoft.Network/virtualNetworks/', variables('VNet_Name'))]"
+      ]
+    },
+    {
+      "comments": "Create the local network Gateway",
+      // Generalized from resource: '/subscriptions/e5b88ba1-6e66-4465-9fe2-2d59087de303/resourceGroups/rg-itvt-solutions-test/providers/Microsoft.Network/localNetworkGateways/itvt-solutions-boerfnik-gw'.",
+      "type": "Microsoft.Network/localNetworkGateways",
+      "name": "[variables('LocalGW').Name]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "properties": {
+        "localNetworkAddressSpace": {
+          "addressPrefixes": [
+            "[variables('LocalGW').addressPrefixes]"
+          ]
+        },
+        "gatewayIpAddress": "[variables('LocalGW').gatewayIpAddress]"
+      },
+      "dependsOn": []
+    },
+    {
+      "comments": "Create network connection between local and azure sites",
+      // "Generalized from resource: '/subscriptions/e5b88ba1-6e66-4465-9fe2-2d59087de303/resourceGroups/rg-itvt-solutions-test/providers/Microsoft.Network/connections/itvt-solutions-boerfink'.",
+      "type": "Microsoft.Network/connections",
+      "name": "[variables('Connection').Name]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "properties": {
+        "virtualNetworkGateway1": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('VirtualGW').Name)]"
+        },
+        "localNetworkGateway2": {
+          "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGW').Name)]"
+        },
+        "connectionType": "IPsec",
+        "routingWeight": 0,
+        "enableBgp": false,
+        "usePolicyBasedTrafficSelectors": false,
+        "ipsecPolicies": [],
+        "sharedKey": "[variables('Connection').sharedKey]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('VirtualGW').Name)]",
+        "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGW').Name)]"
+      ]
+    }
+  ],
+  "outputs": {
+    "ipaddress": {
+      "value": "[reference(variables('VirtualGW').PublicIP_Name).ipAddress]",
+      "type": "string"
+    }
+  }
+}

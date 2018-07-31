@@ -1,0 +1,63 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Project_Name": {
+      "defaultValue": "itvt-web-app",
+      "type": "string"
+    },
+    "securityGroupRules": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "ruleName": "Site-to-Site-any",
+          "protocol": "*",
+          "sourcePortRange": "*",
+          "destinationPortRange": "*",
+          "sourceAddressPrefix": "10.6.20.0/24",
+          "destinationAddressPrefix": "VirtualNetwork",
+          "access": "Allow",
+          "priority": 100,
+          "direction": "Inbound"
+        }
+      ]
+    }
+  },
+  "variables": {
+    "NetworSecurityGroup_Name": "[concat(parameters('Project_Name'),'-nsg')]",
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+      "comments": "Creating the NSG for the project",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('NetworSecurityGroup_Name')]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+        "copy": [
+          {
+            "name": "securityRules",
+            "count": "[length(parameters('securityGroupRules'))]",
+            "input": {
+              "name": "[parameters('securityGroupRules')[copyIndex('securityRules')].ruleName]",
+              "properties": {
+                "protocol": "[parameters('securityGroupRules')[copyIndex('securityRules')].protocol]",
+                "sourcePortRange": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourcePortRange]",
+                "destinationPortRange": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationPortRange]",
+                "sourceAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefix]",
+                "destinationAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefix]",
+                "access": "[parameters('securityGroupRules')[copyIndex('securityRules')].access]",
+                "priority": "[parameters('securityGroupRules')[copyIndex('securityRules')].priority]",
+                "direction": "[parameters('securityGroupRules')[copyIndex('securityRules')].direction]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": []
+    }
+  ],
+  "outputs": {}
+}

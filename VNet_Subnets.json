@@ -1,0 +1,72 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Project_Name": {
+      "defaultValue": "itvt-solutions",
+      "type": "string"
+    },
+    "VNet": {
+      "type": "object",
+      "defaultValue": {
+        "Name": "[concat(parameters('Project_Name'),'-vnet')]",
+        "Address_Prefix": "10.203.0.0/24"
+      }
+    },
+    "Subnets": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "SubnetName": "GatewaySubnet",
+          "Address_Prefix": "10.203.0.224/27"
+        },
+        {
+          "SubnetName": "[concat(parameters('Project_Name'),'-subnet01')]",
+          "Address_Prefix": "10.203.0.0/25"
+        }
+      ]
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "NetworSecurityGroup_Name": "[concat(parameters('Project_Name'),'-nsg')]"
+  },
+  "resources": [
+    {
+      "comments": "Creating Virtual Network with gateway and project subnets",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('VNet').Name]",
+      "apiVersion": "2018-02-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('VNet').Address_Prefix]"
+          ]
+        },
+        "copy": [
+          {
+            "name": "Subnets",
+            "count": "[length(parameters('Subnets'))]",
+            "input": {
+              "name": "[parameters('Subnets')[copyIndex('Subnets')].SubnetName]",
+              "properties": {
+                "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].Address_Prefix]",
+                //Set NSG for GatewaySubnet in null
+                "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', variables('NetworSecurityGroup_Name')),'\"}')) )]"
+              }
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false,
+        "enableVmProtection": false
+      },
+      "dependsOn": []
+    }
+  ],
+  "outputs": {
+
+  }
+}
