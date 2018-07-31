@@ -123,9 +123,9 @@
     }
   ],
   "outputs": {
-    "ipaddress": {
-      "value": "[reference(variables('VirtualGW').PublicIP_Name).ipAddress]",
-      "type": "string"
-    }
+//    "ipaddress": {
+//      "value": "[reference(variables('VirtualGW').PublicIP_Name).ipAddress]",
+//      "type": "string"
+//    }
   }
 }
