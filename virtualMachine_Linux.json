@@ -53,7 +53,7 @@
       "type": "array",
       "defaultValue": [
         {
-          "name": "[concat(parameters('VMName'),'-datadisk1','.vhd')]",
+          "nameprefix": "temp",
           "createOption": "Empty",
           "diskSizeGB": "1023"
         }
