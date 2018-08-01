@@ -57,10 +57,9 @@
     "ImageOffer": "WindowsServer",
     "OSDiskName": "OSDisk",
     "VmSize": "Standard_D2_v2",
-    "VnetID": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
-    "SubnetRef": "[concat(variables('VnetID'), '/subnets/', parameters('virtualNetwork').SubnetName)]",
+    "SubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('virtualNetwork').SubnetName)]",
     "StorageAccountContainerName": "vhds",
-    "NicName": "[concat(parameters('VMName'), '-nic')]",
+    "NicName": "[concat(parameters('VMName'), '-nic')]"
   },
   "resources": [
     {
