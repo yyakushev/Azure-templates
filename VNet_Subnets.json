@@ -2,15 +2,11 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "project-name": {
-      "defaultValue": "itvt-solutions",
-      "type": "string"
-    },
     "vNet": {
       "type": "object",
       "defaultValue": {
-        "Name": "[concat(parameters('project-name'),'-vNet')]",
-        "Address_Prefix": "10.203.0.0/24"
+        "Name": "[concat('Project','-vNet')]",
+        "AddressPrefix": "10.203.0.0/24"
       }
     },
     "Subnets": {
@@ -18,18 +14,19 @@
       "defaultValue": [
         {
           "SubnetName": "GatewaySubnet",
-          "Address_Prefix": "10.203.0.224/27"
+          "AddressPrefix": "10.203.0.224/27",
+          "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         },
         {
-          "SubnetName": "[concat(parameters('project-name'),'-subnet01')]",
-          "Address_Prefix": "10.203.0.0/25"
+          "SubnetName": "[concat('subnet-','01')]",
+          "AddressPrefix": "10.203.0.0/25",
+          "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         }
       ]
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "NetworSecurityGroup_Name": "[concat(parameters('project-name'),'-nsg')]"
   },
   "resources": [
     {
@@ -42,7 +39,7 @@
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[parameters('vNet').Address_Prefix]"
+            "[parameters('vNet').AddressPrefix]"
           ]
         },
         "copy": [
@@ -52,9 +49,9 @@
             "input": {
               "name": "[parameters('Subnets')[copyIndex('Subnets')].SubnetName]",
               "properties": {
-                "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].Address_Prefix]",
+                "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].AddressPrefix]",
                 //Set NSG for GatewaySubnet in null
-                "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', variables('NetworSecurityGroup_Name')),'\"}')) )]"
+                "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]"
               }
             }
           }
