@@ -4,7 +4,7 @@
   "parameters": {
     "virtualNetwork": {
       "defaultValue": {
-        "virtualNetworkName": "vNet",
+        "virtualNetworkName": "virtualNetwork",
         "SubnetName": "subnet"
       },
       "type": "object"
@@ -135,7 +135,18 @@
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "copy": [
+            {
+              "name": "dataDisks",
+              "count": 3,
+              "input": {
+                "lun": "[copyIndex('dataDisks')]",
+                "createOption": "Empty",
+                "diskSizeGB": "1023"
+              }
+            }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [

@@ -2,10 +2,10 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vNet": {
+    "virtualNetwork": {
       "type": "object",
       "defaultValue": {
-        "Name": "[concat('Project','-vNet')]",
+        "Name": "[concat('Project','-vnet')]",
         "AddressPrefix": "10.203.0.0/24"
       }
     },
@@ -32,14 +32,14 @@
     {
       "comments": "Creating Virtual Network with gateway and project subnets",
       "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('vNet').Name]",
+      "name": "[parameters('virtualNetwork').Name]",
       "apiVersion": "2018-02-01",
       "location": "[variables('location')]",
       "scale": null,
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[parameters('vNet').AddressPrefix]"
+            "[parameters('virtualNetwork').AddressPrefix]"
           ]
         },
         "copy": [

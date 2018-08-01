@@ -13,7 +13,7 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "VNet_Name": "[concat(parameters('projectname'),'-vnet')]",
+    "virtualNetwork_Name": "[concat(parameters('projectname'),'-vnet')]",
     "VirtualGW": {
       "Name": "[concat(parameters('projectname'),'-vgw')]",
       "PublicIP_Name": "[parameters('pip-name')]",
@@ -50,7 +50,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('VirtualGW').PublicIP_Name)]"
               },
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('VNet_Name'), 'GatewaySubnet')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetwork_Name'), 'GatewaySubnet')]"
               }
             }
           }
@@ -75,7 +75,7 @@
       },
       "dependsOn": [
         //"[resourceId('Microsoft.Network/publicIPAddresses', variables('VirtualGW').PublicIP_Name)]" //,
-        //"[concat('Microsoft.Network/virtualNetworks/', variables('VNet_Name'))]"
+        //"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetwork_Name'))]"
       ]
     },
     {
