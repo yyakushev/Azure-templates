@@ -160,7 +160,7 @@
               "name": "dataDisks",
               "count": "[length(parameters('dataDisks'))]",
               "input": {
-                "name": "[concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex(),'.vhd')]",
+                "name": "[concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd')]",
                 "lun": "[copyIndex('dataDisks')]",
                 "createOption": "[parameters('dataDisks')[copyIndex('dataDisks')].createOption]",
                 "diskSizeGB": "[parameters('dataDisks')[copyIndex('dataDisks')].diskSizeGB]",
