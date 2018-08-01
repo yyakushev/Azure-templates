@@ -94,7 +94,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics').SubnetName)]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
               }
             }
           }
