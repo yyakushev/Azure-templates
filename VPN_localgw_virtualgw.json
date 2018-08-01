@@ -2,20 +2,20 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "project-name": {
+    "projectname": {
       "defaultValue": "itvt-web-app",
       "type": "string"
     },
     "pip-name": {
-      "defaultValue": "[concat(parameters('project-name'),'-vgw-pip')]",
+      "defaultValue": "[concat(parameters('projectname'),'-vgw-pip')]",
       "type": "string"
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "VNet_Name": "[concat(parameters('project-name'),'-vnet')]",
+    "VNet_Name": "[concat(parameters('projectname'),'-vnet')]",
     "VirtualGW": {
-      "Name": "[concat(parameters('project-name'),'-vgw')]",
+      "Name": "[concat(parameters('projectname'),'-vgw')]",
       "PublicIP_Name": "[parameters('pip-name')]",
       "sku": {
         "name": "VpnGw1",
@@ -23,12 +23,12 @@
       }
     },
     "LocalGW": {
-      "Name": "[concat(parameters('project-name'),'-lgw')]",
+      "Name": "[concat(parameters('projectname'),'-lgw')]",
       "addressPrefixes": "10.6.20.0/24",
       "gatewayIpAddress": "185.121.96.93"
     },
     "Connection": {
-      "Name": "[concat(parameters('project-name'),'-vgw-lgw')]",
+      "Name": "[concat(parameters('projectname'),'-vgw-lgw')]",
       "sharedKey": "!qaz2wsx3edc$rfv5tgb"
     }
   },
