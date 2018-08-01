@@ -35,20 +35,19 @@
       "minLength": 1,
       "maxLength": 15
     },
+    "OSVersion": {
+      "type": "string",
+      "defaultValue": "16.04.0-LTS",
+      "allowedValues": [
+        "12.04.5-LTS",
+        "14.04.5-LTS",
+        "15.10",
+        "16.04.0-LTS"
+      ]
+    },
     "VmSize": {
       "type": "string",
       "defaultValue": "Standard_B1s"
-    },
-    "OSVersion": {
-      "type": "string",
-      "defaultValue": "2016-Datacenter",
-      "allowedValues": [
-        "2008-R2-SP1",
-        "2012-Datacenter",
-        "2012-R2-Datacenter",
-        "Windows-Server-Technical-Preview",
-        "2016-Datacenter"
-      ]
     },
     "dataDisks": {
       "type": "array",
@@ -70,10 +69,10 @@
   },
   "variables": {
     "StorageName": "[concat('storage', uniqueString(resourceGroup().id))]",
-    "ImagePublisher": "MicrosoftWindowsServer",
-    "ImageOffer": "WindowsServer",
+    "imagePublisher": "Canonical",
+    "imageOffer": "UbuntuServer",
     "OSDiskName": "[concat(parameters('VMName'),'-OSDisk')]",
-//    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
+    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
     "StorageAccountContainerName": "vhds"
   },
   "resources": [
