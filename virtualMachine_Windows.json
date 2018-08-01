@@ -92,7 +92,6 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "primary": "[if(equals(copyIndex('nics-copy'),0),bool('true'),json('null'))]",
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
@@ -165,7 +164,10 @@
               "name": "networkInterfaces",
               "count": "[length(parameters('nics'))]",
               "input": {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VMName'),'-',parameters('nics')[copyIndex('networkInterfaces')].namepreffix,'-nic',copyIndex('networkInterfaces')))]"
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VMName'),'-',parameters('nics')[copyIndex('networkInterfaces')].namepreffix,'-nic',copyIndex('networkInterfaces')))]",
+                "properties": {
+                  "primary": "[if(equals(copyIndex('networkInterfaces'),0),bool('true'),bool('false'))]"
+                }
               }
             }
           ]
