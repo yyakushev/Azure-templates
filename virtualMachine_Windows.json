@@ -46,6 +46,16 @@
         "2016-Datacenter"
       ]
     },
+    "dataDisks": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "name": "[concat(parameters('VMName'),'-datadisk1','.vhd')]",
+          "createOption": "Empty",
+          "diskSizeGB": "1023"
+        }
+      ]
+    },
     "AdminUsername": {
       "type": "string",
       "minLength": 1
@@ -145,14 +155,14 @@
           "copy": [
             {
               "name": "dataDisks",
-              "count": 3,
+              "count": "[length(parameters('dataDisks'))]",
               "input": {
-                "name": "[concat(parameters('VMName'),'-datadisk', copyIndex('dataDisks'),'.vhd')]",
+                "name": "[parameters('dataDisks')[copyIndex('dataDisks')].name]",
                 "lun": "[copyIndex('dataDisks')]",
-                "createOption": "Empty",
-                "diskSizeGB": "1023",
+                "createOption": "[parameters('dataDisks')[copyIndex('dataDisks')].createOption]",
+                "diskSizeGB": "[parameters('dataDisks')[copyIndex('dataDisks')].diskSizeGB]",
                 "vhd": {
-                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', parameters('VMName'),'-datadisk', copyIndex('dataDisks'),'.vhd')]"
+                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', parameters('dataDisks')[copyIndex('dataDisks')].name)]"
                 }
               }
             }
