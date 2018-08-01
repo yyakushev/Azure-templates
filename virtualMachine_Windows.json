@@ -35,6 +35,10 @@
       "minLength": 1,
       "maxLength": 15
     },
+    "VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2_v2"
+    },
     "OSVersion": {
       "type": "string",
       "defaultValue": "2016-Datacenter",
@@ -69,8 +73,7 @@
     "ImagePublisher": "MicrosoftWindowsServer",
     "ImageOffer": "WindowsServer",
     "OSDiskName": "[concat(parameters('VMName'),'-OSDisk')]",
-    "VmSize": "Standard_D2_v2",
-    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
+//    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
     "StorageAccountContainerName": "vhds"
   },
   "resources": [
@@ -130,7 +133,7 @@
       "tags": { },
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[variables('VmSize')]"
+          "vmSize": "[parameters('VmSize')]"
         },
         "osProfile": {
           "computerName": "[parameters('VMName')]",
