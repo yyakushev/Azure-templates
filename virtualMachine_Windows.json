@@ -88,6 +88,7 @@
       ],
       "tags": {},
       "properties": {
+        "primary": "[if(equals(copyIndex(),'0'),json('true'),json('false'))]",
         "ipConfigurations": [
           {
             "name": "ipconfig1",
