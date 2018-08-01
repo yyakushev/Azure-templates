@@ -151,7 +151,7 @@
                 "createOption": "Empty",
                 "diskSizeGB": "1023",
                 "vhd": {
-                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob,variables('StorageAccountContainerName'), '/','datadisk-',copyIndex('dataDisks'),'.vhd')]"
+                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob,variables('StorageAccountContainerName'), '/','datadisk',copyIndex('dataDisks'),'.vhd')]"
                 }
               }
             }
