@@ -55,7 +55,7 @@
     "StorageName": "[concat('storage', uniqueString(resourceGroup().id))]",
     "ImagePublisher": "MicrosoftWindowsServer",
     "ImageOffer": "WindowsServer",
-    "OSDiskName": "OSDisk",
+    "OSDiskName": "[concat(parameters('VMName'),'-OSDisk')]",
     "VmSize": "Standard_D2_v2",
     "SubnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('virtualNetwork').SubnetName)]",
     "StorageAccountContainerName": "vhds",
