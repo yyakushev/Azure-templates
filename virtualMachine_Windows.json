@@ -88,11 +88,11 @@
       ],
       "tags": {},
       "properties": {
-        "primary": "[if(equals(copyIndex(),'0'),json('true'),json('false'))]",
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "properties": {
+              "primary": "[if(equals(copyIndex(),'0'),json('true'),json('false'))]",
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
