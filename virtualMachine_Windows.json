@@ -92,7 +92,7 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "primary": "[if(equals(copyIndex(),'0'),bool('true'),bool('false'))]",
+              "primary": "[if(equals(copyIndex(),0),bool('true'),json('null'))]",
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
