@@ -165,7 +165,7 @@
                 "createOption": "[parameters('dataDisks')[copyIndex('dataDisks')].createOption]",
                 "diskSizeGB": "[parameters('dataDisks')[copyIndex('dataDisks')].diskSizeGB]",
                 "vhd": {
-                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex(),'.vhd'))]"
+                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd'))]"
                 }
               }
             }
