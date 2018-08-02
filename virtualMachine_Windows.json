@@ -50,6 +50,10 @@
         "2016-Datacenter"
       ]
     },
+    "numberOfDataDisks": {
+      "type": "int",
+      "defaultValue": "0"
+    },
     "dDisks": {
       "type": "array",
       "defaultValue": [
@@ -73,8 +77,22 @@
     "ImagePublisher": "MicrosoftWindowsServer",
     "ImageOffer": "WindowsServer",
     "OSDiskName": "[concat(parameters('VMName'),'-OSDisk')]",
-//    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
-    "StorageAccountContainerName": "vhds"
+    //    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
+    "StorageAccountContainerName": "vhds",
+    "copy": [
+      {
+        "name": "dataDisks",
+        "count": "[if(equals(parameters('numberOfDataDisks'),0),1, parameters('numberOfDataDisks'))]",
+        "input": {
+          "lun": "[copyIndex('dataDisks')]",
+          "createOption": "[parameters('dDisks')[copyIndex('dataDisks')].createOption]",
+          "diskSizeGB": "[parameters('dDisks')[copyIndex('dataDisks')].diskSizeGB]",
+          "vhd": {
+            "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd'))]"
+          }
+        }
+      }
+    ]
   },
   "resources": [
     {
@@ -155,21 +173,22 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-          "copy": [
-            {
-              "name": "dataDisks",
-              "count": "[length(parameters('dDisks'))]",
-              "input": {
-                "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd')]",
-                "lun": "[copyIndex('dataDisks')]",
-                "createOption": "[parameters('dDisks')[copyIndex('dataDisks')].createOption]",
-                "diskSizeGB": "[parameters('dDisks')[copyIndex('dataDisks')].diskSizeGB]",
-                "vhd": {
-                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd'))]"
-                }
-              }
-            }
-          ]
+//          "copy": [
+//            {
+//              "name": "dataDisks",
+//              "count": "[length(parameters('dDisks'))]",
+//              "input": {
+//                "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd')]",
+//                "lun": "[copyIndex('dataDisks')]",
+//                "createOption": "[parameters('dDisks')[copyIndex('dataDisks')].createOption]",
+//                "diskSizeGB": "[parameters('dDisks')[copyIndex('dataDisks')].diskSizeGB]",
+//                "vhd": {
+//                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd'))]"
+//                }
+//              }
+//            }
+//          ],
+          "dataDisks": "[if(equals(parameters('numberOfDataDisks'),0),json('null'),variables('dataDisks'))]"
         },
         "networkProfile": {
           "copy": [
