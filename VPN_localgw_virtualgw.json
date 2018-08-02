@@ -11,7 +11,7 @@
       "type": "string"
     },
     "localaddressprefixes": {
-      "defaultValue": [ "10.6.20.0/24" ],
+      "defaultValue": [ "10.0.0.0/24" ],
       "type": "array"
     },
     "localgatewayIPaddress": {
@@ -20,7 +20,7 @@
     },
     "sharedKey": {
       "type": "string",
-      "defaultValue": "!qaz2wsx3edc$rfv5tgb"
+      "defaultValue": "verysecurestring"
     }
   },
   "variables": {
