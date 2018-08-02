@@ -81,15 +81,15 @@
     "StorageAccountContainerName": "vhds",
     "copy": [
       {
-        "name": "dataDisks",
+        "name": "Disks",
         "count": "[if(equals(parameters('numberOfDataDisks'),0),1, parameters('numberOfDataDisks'))]",
         "input": {
-          "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd')]",
+          "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd')]",
           "lun": "[copyIndex('dataDisks')]",
-          "createOption": "[parameters('dDisks')[copyIndex('dataDisks')].createOption]",
-          "diskSizeGB": "[parameters('dDisks')[copyIndex('dataDisks')].diskSizeGB]",
+          "createOption": "[parameters('dDisks')[copyIndex('Disks')].createOption]",
+          "diskSizeGB": "[parameters('dDisks')[copyIndex('Disks')].diskSizeGB]",
           "vhd": {
-            "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'.vhd'))]"
+            "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
           }
         }
       }
@@ -189,7 +189,7 @@
           //              }
           //            }
           //          ],
-          "dataDisks": "[if(equals(parameters('numberOfDataDisks'),0),json('null'),variables('dataDisks'))]"
+          "dataDisks": "[if(equals(parameters('numberOfDataDisks'),0),json('null'),variables('Disks'))]"
         },
         "networkProfile": {
           "copy": [
