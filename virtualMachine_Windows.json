@@ -15,6 +15,7 @@
           "namepreffix": "local",
           "SubnetName": "subnet",
           "privateIPAllocationMethod": "Dynamic",
+          "privateIPAddress": null, //requir if allocation static
           "dnsServers": []
         }
       ]
@@ -77,7 +78,6 @@
     "ImagePublisher": "MicrosoftWindowsServer",
     "ImageOffer": "WindowsServer",
     "OSDiskName": "[concat(parameters('VMName'),'-OSDisk')]",
-    //    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
     "StorageAccountContainerName": "vhds",
     "copy": [
       {
