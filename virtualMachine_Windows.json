@@ -124,7 +124,8 @@
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "[parameters('nics')[copyIndex()].privateIPAllocationMethod]",
+              "privateIPAddress": "[parameters('nics')[copyIndex()].privateIPAddress]",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
               }
