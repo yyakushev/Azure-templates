@@ -89,7 +89,7 @@
           "createOption": "[parameters('dDisks')[copyIndex('Disks')].createOption]",
           "diskSizeGB": "[parameters('dDisks')[copyIndex('Disks')].diskSizeGB]",
           "vhd": {
-            "uri": "[concat('https://',variables('StorageName'),'core.windows.net/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
+            "uri": "[concat('https://',variables('StorageName'),'.blob.core.windows.net/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
           }
         }
       }
