@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "pip-name": {
+    "pipname": {
       "type": "string",
       "defaultValue": "pip"
     }
@@ -18,7 +18,7 @@
         "name": "Basic",
         "tier": "Regional"
       },
-      "name": "[parameters('pip-name')]",
+      "name": "[parameters('pipname')]",
       "apiVersion": "2018-02-01",
       "location": "[variables('location')]",
       "scale": null,

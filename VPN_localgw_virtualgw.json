@@ -10,6 +10,10 @@
       "defaultValue": "[concat(parameters('projectname'),'-vgw-pip')]",
       "type": "string"
     },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "vnet"
+    },
     "localaddressprefixes": {
       "defaultValue": [ "10.0.0.0/24" ],
       "type": "array"
@@ -25,7 +29,7 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "virtualNetwork_Name": "[concat(parameters('projectname'),'-vnet')]",
+    "virtualNetwork_Name": "[parameters('virtualNetworkName')]",
     "VirtualGW": {
       "Name": "[concat(parameters('projectname'),'-vgw')]",
       "PublicIP_Name": "[parameters('pipname')]",
