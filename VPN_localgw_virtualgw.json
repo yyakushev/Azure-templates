@@ -6,9 +6,21 @@
       "defaultValue": "itvt-web-app",
       "type": "string"
     },
-    "pip-name": {
+    "pipname": {
       "defaultValue": "[concat(parameters('projectname'),'-vgw-pip')]",
       "type": "string"
+    },
+    "localaddressprefixes": {
+      "defaultValue": [ "10.6.20.0/24" ],
+      "type": "array"
+    },
+    "localgatewayIPaddress": {
+      "type": "string",
+      "defaultValue": "8.8.8.8"
+    },
+    "sharedKey": {
+      "type": "string",
+      "defaultValue": "!qaz2wsx3edc$rfv5tgb"
     }
   },
   "variables": {
@@ -16,7 +28,7 @@
     "virtualNetwork_Name": "[concat(parameters('projectname'),'-vnet')]",
     "VirtualGW": {
       "Name": "[concat(parameters('projectname'),'-vgw')]",
-      "PublicIP_Name": "[parameters('pip-name')]",
+      "PublicIP_Name": "[parameters('pipname')]",
       "sku": {
         "name": "VpnGw1",
         "tier": "VpnGw1"
@@ -24,12 +36,12 @@
     },
     "LocalGW": {
       "Name": "[concat(parameters('projectname'),'-lgw')]",
-      "addressPrefixes": "10.6.20.0/24",
-      "gatewayIpAddress": "185.121.96.93"
+      "addressPrefixes": "[parameters('localaddressprefixes')]",
+      "gatewayIpAddress": "[parameters('localgatewayIPaddress')]"
     },
     "Connection": {
       "Name": "[concat(parameters('projectname'),'-vgw-lgw')]",
-      "sharedKey": "!qaz2wsx3edc$rfv5tgb"
+      "sharedKey": "[parameters('sharedKey')]"
     }
   },
   "resources": [
