@@ -15,7 +15,7 @@
       "defaultValue": "vnet"
     },
     "localaddressprefixes": {
-      "defaultValue": [ "10.0.0.0/24" ],
+      "defaultValue": "10.0.0.0/24",
       "type": "array"
     },
     "localgatewayIPaddress": {
@@ -38,11 +38,7 @@
         "tier": "VpnGw1"
       }
     },
-    "LocalGW": {
-      "Name": "[concat(parameters('projectname'),'-lgw')]",
-      "addressPrefixes": "[parameters('localaddressprefixes')]",
-      "gatewayIpAddress": "[parameters('localgatewayIPaddress')]"
-    },
+    "LocalGWName": "[concat(parameters('projectname'),'-lgw')]",
     "Connection": {
       "Name": "[concat(parameters('projectname'),'-vgw-lgw')]",
       "sharedKey": "[parameters('sharedKey')]"
@@ -98,16 +94,14 @@
       "comments": "Create the local network Gateway",
       // Generalized from resource: '/subscriptions/e5b88ba1-6e66-4465-9fe2-2d59087de303/resourceGroups/rg-itvt-solutions-test/providers/Microsoft.Network/localNetworkGateways/itvt-solutions-boerfnik-gw'.",
       "type": "Microsoft.Network/localNetworkGateways",
-      "name": "[variables('LocalGW').Name]",
+      "name": "[variables('LocalGWName')]",
       "apiVersion": "2018-02-01",
       "location": "[variables('location')]",
       "properties": {
         "localNetworkAddressSpace": {
-          "addressPrefixes": [
-            "[variables('LocalGW').addressPrefixes]"
-          ]
+          "addressPrefixes": "[parameters('localaddressprefixes')]"
         },
-        "gatewayIpAddress": "[variables('LocalGW').gatewayIpAddress]"
+        "gatewayIpAddress": "[parameters('localgatewayIPaddress')]"
       },
       "dependsOn": []
     },
@@ -123,7 +117,7 @@
           "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('VirtualGW').Name)]"
         },
         "localNetworkGateway2": {
-          "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGW').Name)]"
+          "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGWName')]"
         },
         "connectionType": "IPsec",
         "routingWeight": 0,
@@ -134,7 +128,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('VirtualGW').Name)]",
-        "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGW').Name)]"
+        "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGWName'))]"
       ]
     }
   ],
