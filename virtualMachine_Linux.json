@@ -49,7 +49,7 @@
       "type": "string",
       "defaultValue": "Standard_B1s"
     },
-    "dataDisks": {
+    "dDisks": {
       "type": "array",
       "defaultValue": [
         {
@@ -157,14 +157,14 @@
           "copy": [
             {
               "name": "dataDisks",
-              "count": "[length(parameters('dataDisks'))]",
+              "count": "[length(parameters('dDisks'))]",
               "input": {
-                "name": "[concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd')]",
+                "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd')]",
                 "lun": "[copyIndex('dataDisks')]",
-                "createOption": "[parameters('dataDisks')[copyIndex('dataDisks')].createOption]",
-                "diskSizeGB": "[parameters('dataDisks')[copyIndex('dataDisks')].diskSizeGB]",
+                "createOption": "[parameters('dDisks')[copyIndex('dataDisks')].createOption]",
+                "diskSizeGB": "[parameters('dDisks')[copyIndex('dataDisks')].diskSizeGB]",
                 "vhd": {
-                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd'))]"
+                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd'))]"
                 }
               }
             }
