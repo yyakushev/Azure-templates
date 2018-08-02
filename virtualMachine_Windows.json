@@ -52,7 +52,7 @@
     },
     "numberOfDataDisks": {
       "type": "int",
-      "defaultValue": "0"
+      "defaultValue": 0
     },
     "dDisks": {
       "type": "array",
