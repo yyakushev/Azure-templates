@@ -45,7 +45,7 @@
                 "protocol": "[parameters('securityGroupRules')[copyIndex('securityRules')].protocol]",
                 "sourcePortRange": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourcePortRange]",
                 "destinationPortRange": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationPortRange]",
-                "sourceAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefix]",
+                "sourceAddressPrefix": "[array(parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefix)]",
                 "destinationAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefix]",
                 "access": "[parameters('securityGroupRules')[copyIndex('securityRules')].access]",
                 "priority": "[parameters('securityGroupRules')[copyIndex('securityRules')].priority]",
