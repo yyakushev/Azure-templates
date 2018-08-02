@@ -117,7 +117,7 @@
           "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('VirtualGW').Name)]"
         },
         "localNetworkGateway2": {
-          "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGWName')]"
+          "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('LocalGWName'))]"
         },
         "connectionType": "IPsec",
         "routingWeight": 0,
