@@ -49,6 +49,10 @@
       "type": "string",
       "defaultValue": "Standard_B1s"
     },
+    "numberOfDataDisks": {
+      "type": "int",
+      "defaultValue": 0
+    },
     "dDisks": {
       "type": "array",
       "defaultValue": [
@@ -72,15 +76,29 @@
     "imagePublisher": "Canonical",
     "imageOffer": "UbuntuServer",
     "OSDiskName": "[concat(parameters('VMName'),'-OSDisk')]",
-    "vNetRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]",
-    "StorageAccountContainerName": "vhds"
+    "StorageAccountContainerName": "vhds",
+    "copy": [
+      {
+        "name": "Disks",
+        "count": "[if(equals(parameters('numberOfDataDisks'),0),1, parameters('numberOfDataDisks'))]",
+        "input": {
+          "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd')]",
+          "lun": "[copyIndex('Disks')]",
+          "createOption": "[parameters('dDisks')[copyIndex('Disks')].createOption]",
+          "diskSizeGB": "[parameters('dDisks')[copyIndex('Disks')].diskSizeGB]",
+          "vhd": {
+            "uri": "[concat('https://',variables('StorageName'),'.blob.core.windows.net/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
+          }
+        }
+      }
+    ]
   },
   "resources": [
     {
       "name": "[variables('StorageName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2016-01-01",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[parameters('StorageType')]"
       },
@@ -124,12 +142,12 @@
       "name": "[parameters('VMName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2017-03-30",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('StorageName'))]",
         "nics-copy"
       ],
-      "tags": { },
+      "tags": {},
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('VmSize')]"
@@ -154,21 +172,7 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-          "copy": [
-            {
-              "name": "dataDisks",
-              "count": "[length(parameters('dDisks'))]",
-              "input": {
-                "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd')]",
-                "lun": "[copyIndex('dataDisks')]",
-                "createOption": "[parameters('dDisks')[copyIndex('dataDisks')].createOption]",
-                "diskSizeGB": "[parameters('dDisks')[copyIndex('dataDisks')].diskSizeGB]",
-                "vhd": {
-                  "uri": "[concat(reference(resourceId('Microsoft.Storage/storageAccounts/', variables('StorageName'))).primaryEndpoints.blob, variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('dataDisks')].nameprefix,'-datadisk',copyIndex('dataDisks'),'.vhd'))]"
-                }
-              }
-            }
-          ]
+          "dataDisks": "[if(equals(parameters('numberOfDataDisks'),0),json('null'),variables('Disks'))]"
         },
         "networkProfile": {
           "copy": [
