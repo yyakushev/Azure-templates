@@ -144,7 +144,7 @@
       "name": "[parameters('VMName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2017-03-30",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('StorageName'))]",
         "nics-copy"
