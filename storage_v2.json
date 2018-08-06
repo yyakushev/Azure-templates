@@ -1,0 +1,62 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string",
+      "defaultValue": "[concat('storageblob', uniqueString(resourceGroup().id))]"
+    },
+    "accountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      // Standard_ZRS is available only for StorageV2
+      "allowedValues": [ "Standard_RAGRS", "Standard_LRS", "Standard_GRS", "Standard_ZRS" ]
+    },
+    "kind": {
+      "type": "string",
+      "defaultValue": "BlobStorage",
+      "allowedValues": [ "StorageV2", "BlobStorage" ]
+    },
+    "accessTier": {
+      "type": "string",
+      "defaultValue": "Hot",
+      "allowedValues": [ "Hot", "Cool" ]
+    },
+    "httpsTrafficOnlyEnabled": {
+      "type": "bool",
+      "defaultValue": false,
+      "allowedValues": [true,false]
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('name')]",
+            "location": "[variables('location')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "[parameters('accountType')]"
+            },
+            "kind": "[parameters('kind')]",
+            "properties": {
+                "supportsHttpsTrafficOnly": "[parameters('httpsTrafficOnlyEnabled')]",
+                "accessTier": "[parameters('accessTier')]",
+                "encryption": {
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        },
+                        "file": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}
