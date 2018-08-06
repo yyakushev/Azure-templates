@@ -4,7 +4,7 @@
   "parameters": {
     "name": {
       "type": "string",
-      "defaultValue": "[concat('storageblob', uniqueString(resourceGroup().id))]"
+      "defaultValue": "[concat('storagev2', uniqueString(resourceGroup().id))]"
     },
     "accountType": {
       "type": "string",
@@ -32,31 +32,34 @@
     "location": "[resourceGroup().location]"
   },
   "resources": [
-        {
-            "apiVersion": "2018-02-01",
-            "name": "[parameters('name')]",
-            "location": "[variables('location')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "[parameters('accountType')]"
+    {
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('name')]",
+      "location": "[variables('location')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "[parameters('accountType')]"
+      },
+      "kind": "[parameters('kind')]",
+      "properties": {
+        "supportsHttpsTrafficOnly": "[parameters('httpsTrafficOnlyEnabled')]",
+        "accessTier": "[parameters('accessTier')]",
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
             },
-            "kind": "[parameters('kind')]",
-            "properties": {
-                "supportsHttpsTrafficOnly": "[parameters('httpsTrafficOnlyEnabled')]",
-                "accessTier": "[parameters('accessTier')]",
-                "encryption": {
-                    "services": {
-                        "blob": {
-                            "enabled": true
-                        },
-                        "file": {
-                            "enabled": true
-                        }
-                    },
-                    "keySource": "Microsoft.Storage"
-                }
-            },
-            "dependsOn": []
+            "file": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
         }
-    ]
+      },
+      "dependsOn": []
+    }
+  ],
+  "outputs": {
+    "storagename": { "value": "[parameters('name')]" }
+  }
 }
