@@ -60,6 +60,8 @@
     }
   ],
   "outputs": {
-    "storagename": { "value": "[parameters('name')]" }
+    "storagename": { 
+      "type": "string",
+      "value": "[parameters('name')]" }
   }
 }
