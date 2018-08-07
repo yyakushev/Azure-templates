@@ -5,6 +5,14 @@
     "pipname": {
       "type": "string",
       "defaultValue": "pip"
+    },
+    "publicIPAllocationMethod": {
+      "type": "string",
+      "defaultValue": "Dynamic",
+      "allowedValues": [
+        "Dynamic",
+        "Static"
+      ]
     }
   },
   "variables": {
@@ -12,7 +20,7 @@
   },
   "resources": [
     {
-      "comments": "Create public IP address for the VPN gateway",
+      "comments": "Create public IP address",
       "type": "Microsoft.Network/publicIPAddresses",
       "sku": {
         "name": "Basic",
@@ -24,7 +32,7 @@
       "scale": null,
       "properties": {
         "publicIPAddressVersion": "IPv4",
-        "publicIPAllocationMethod": "Dynamic",
+        "publicIPAllocationMethod": "[parameters('publicIPAllocationMethod')]",
         "idleTimeoutInMinutes": 4,
         "ipTags": []
       },

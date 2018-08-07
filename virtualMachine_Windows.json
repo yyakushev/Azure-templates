@@ -15,7 +15,9 @@
           "namepreffix": "local",
           "SubnetName": "subnet",
           "privateIPAllocationMethod": "Dynamic",
-          "privateIPAddress": null, //requir if allocation static
+          "privateIPAddress": null, //required if allocation is static
+          "publicIPAllocationMethod": "Dynamic", //required if publicIPaddress is true
+          "publicIPAddress": 'false',
           "dnsServers": []
         }
       ]
@@ -111,6 +113,32 @@
       "kind": "Storage"
     },
     {
+      "condition": "[equals(parameters('nics')[copyIndex()].publicIPAddress,'true')]",
+      "apiVersion": "2018-02-01",
+      "name": "[concat('public-ip-linked-template',copyIndex())]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/yyakushev/Azure-templates/master/public-ip.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "pipname": {
+            "value": "[concat(parameters('VMName'),'-',parameters('nics')[copyIndex()].namepreffix,'-nic',copyIndex(),'-pip')]"
+          },
+          "publicIPAllocationMethod": {
+            "value": "[parameters('nics')[copyIndex()].publicIPAllocationMethod]"
+          }
+        }
+      },
+      "copy": {
+        "name": "publiIPPCopy",
+        "count": "[length(parameters('nics'))]"
+      },
+      "dependsOn": []
+    },
+    {
       "name": "[concat(parameters('VMName'),'-',parameters('nics')[copyIndex()].namepreffix,'-nic',copyIndex())]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
@@ -126,6 +154,7 @@
             "properties": {
               "privateIPAllocationMethod": "[parameters('nics')[copyIndex()].privateIPAllocationMethod]",
               "privateIPAddress": "[parameters('nics')[copyIndex()].privateIPAddress]",
+              "publicIPAddress": "[if(equals(parameters('nics')[copyIndex()].publicIPAddress,'true'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('VMName'),'-',parameters('nics')[copyIndex()].namepreffix,'-nic',copyIndex(),'-pip')),'\"}')),json('null'))]",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
               }
