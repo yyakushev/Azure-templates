@@ -177,7 +177,8 @@
       "apiVersion": "2017-03-30",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('StorageName'))]",
-        "nics-copy"
+        "nics-copy",
+        "publiIPPCopy"
       ],
       "tags": {},
       "properties": {
