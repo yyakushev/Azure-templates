@@ -17,7 +17,7 @@
           "privateIPAllocationMethod": "Dynamic",
           "privateIPAddress": null, //required if allocation is static
           "publicIPAllocationMethod": "Dynamic", //required if publicIPaddress is true
-          "publicIPAddress": 'false',
+          "publicIPAddress": "false",
           "dnsServers": []
         }
       ]
