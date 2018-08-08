@@ -53,7 +53,7 @@
         "2016-Datacenter"
       ]
     },
-    "DataDisksExists": {
+    "DataDisksExist": {
       "type": "int",
       "defaultValue": 0
     },
@@ -84,7 +84,7 @@
     "copy": [
       {
         "name": "Disks",
-        "count": "[if(equals(parameters('DataDisksExists'),0),1, length(parameters('dataDisks')))]",
+        "count": "[if(equals(parameters('DataDisksExist'),0),1, length(parameters('dataDisks')))]",
         "input": {
           "name": "[concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd')]",
           "lun": "[copyIndex('Disks')]",
@@ -205,7 +205,7 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-          "dataDisks": "[if(equals(parameters('DataDisksExists'),0),json('null'),variables('Disks'))]"
+          "dataDisks": "[if(equals(parameters('DataDisksExist'),0),json('null'),variables('Disks'))]"
         },
         "networkProfile": {
           "copy": [
