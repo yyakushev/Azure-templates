@@ -33,21 +33,23 @@
       "location": "[resourceGroup().location]",
       "comments": "This is the first vNet",
       "properties": {
-        "addressSpace": null,
-        "subnets": null,
-        "virtualNetworkPeerings": {
-          "name": "[variables('vNetLocaltovNetRemotePeeringName')]",
-          "properties": {
-            "allowVirtualNetworkAccess": "[parameters('vNetLocal').allowVirtualNetworkAccess]",
-            "allowForwardedTraffic": "[parameters('vNetLocal').allowForwardedTraffic]",
-            "allowGatewayTransit": "[parameters('vNetLocal').allowGatewayTransit]",
-            "useRemoteGateways": "[parameters('vNetLocal').useRemoteGateways]",
-            "remoteVirtualNetwork": {
-              "id": "[resourceId(parameters('vNetRemote').subscriptionID, parameters('vNetRemote').resourceGroup, 'Microsoft.Network/virtualNetworks', parameters('vNetRemote').name)]"
-              //"[resourceId('Microsoft.Network/virtualNetworks',parameters('vNetRemote'))]"
+        "addressSpace": "[reference(concat('Microsoft.Network/virtualNetworks/',parameters('vNetLocal').name),'2018-02-01').addressSpace]",
+        "subnets": "[reference(concat('Microsoft.Network/virtualNetworks/',parameters('vNetLocal').name),'2018-02-01').Subnets]",
+        "virtualNetworkPeerings": [
+          {
+            "name": "[variables('vNetLocaltovNetRemotePeeringName')]",
+            "properties": {
+              "allowVirtualNetworkAccess": "[parameters('vNetLocal').allowVirtualNetworkAccess]",
+              "allowForwardedTraffic": "[parameters('vNetLocal').allowForwardedTraffic]",
+              "allowGatewayTransit": "[parameters('vNetLocal').allowGatewayTransit]",
+              "useRemoteGateways": "[parameters('vNetLocal').useRemoteGateways]",
+              "remoteVirtualNetwork": {
+                "id": "[resourceId(parameters('vNetRemote').subscriptionID, parameters('vNetRemote').resourceGroup, 'Microsoft.Network/virtualNetworks', parameters('vNetRemote').name)]"
+                //"[resourceId('Microsoft.Network/virtualNetworks',parameters('vNetRemote'))]"
+              }
             }
           }
-        }
+        ]
       }
     }
   ]
