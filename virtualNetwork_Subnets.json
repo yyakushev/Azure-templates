@@ -63,7 +63,16 @@
             "name": "virtualNetworkPeerings",
             "count": "[length(parameters('virtualNetworkPeerings'))]",
             "input": {
-              "name": "[concat('test-',copyIndex())]"
+              "name": "[concat('test-',copyIndex())]",
+              "properties": {
+                "remoteVirtualNetwork": {
+                  "id": null
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false
+              }
             }
           }
         ],
