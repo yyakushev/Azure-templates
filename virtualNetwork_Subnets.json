@@ -64,7 +64,7 @@
           {
             "name": "virtualNetworkPeerings",
             "count": "[length(parameters('virtualNetworkPeerings'))]",
-            "input": {}
+            "input": {"name": "[concat('test-',copyIndex())]"}
           }
         ],
         "enableDdosProtection": false,
