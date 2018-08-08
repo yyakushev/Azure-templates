@@ -24,7 +24,7 @@
         }
       ]
     },
-    "numberOfvirtualNetworkPeerings": {
+    "virtualNetworkPeeringsExist": {
       "type": "int",
       "defaultValue": 0
     },
@@ -47,7 +47,7 @@
     "copy": [
       {
         "name": "virtualNetworkPeerings",
-        "count": "[if(equals(parameters('numberOfvirtualNetworkPeerings'),0),1, length(parameters('numberOfvirtualNetworkPeerings')))]",
+        "count": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),1, length(parameters('virtualNetworkPeerings')))]",
         "input": {
           "name": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].name]",
           "properties": {
@@ -92,7 +92,7 @@
             }
           }
         ],
-        "virtualNetworkPeerings": "[if(equals(parameters('numberOfvirtualNetworkPeerings'),0),json('null'),variables('virtualNetworkPeerings'))]", //"[variables('virtualNetworkPeerings')]",
+        "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('virtualNetworkPeerings'))]", //"[variables('virtualNetworkPeerings')]",
         "enableDdosProtection": false,
         "enableVmProtection": false
       },
