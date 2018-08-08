@@ -225,7 +225,7 @@
             }
           ]
         },
-        "licenseType": "Windows_Server"
+        "licenseType": "[parameters('licenseType')]"
       },
       "resources": []
     }
