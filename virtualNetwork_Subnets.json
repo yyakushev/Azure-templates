@@ -23,6 +23,10 @@
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         }
       ]
+    },
+    "virtualNetworkPeerings": {
+      "type": "array",
+      "defaultValue": []
     }
   },
   "variables": {
@@ -56,7 +60,7 @@
             }
           }
         ],
-        "virtualNetworkPeerings": [],
+        "virtualNetworkPeerings": "[parameters('virtualNetworkPeerings')]",
         "enableDdosProtection": false,
         "enableVmProtection": false
       },
