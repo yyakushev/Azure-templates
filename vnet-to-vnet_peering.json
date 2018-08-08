@@ -17,7 +17,7 @@
       "defaultValue": {
         "name": "vNetRemote",
         "resourceGroup": "[resourceGroup().name]",
-        "subscriptionID": "[split(resourceGroup().id,'/')[2]]",
+        "subscriptionID": "[string(split(resourceGroup().id,'/')[2])]",
         "location": "[resourceGroup().location]"
       }
     }
