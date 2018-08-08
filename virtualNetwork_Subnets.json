@@ -30,7 +30,16 @@
     },
     "virtualNetworkPeerings": {
       "type": "array",
-      "defaultValue": []
+      "defaultValue": [
+        {
+          "name": "default",
+          "remoteVirtualNetwork": "remote",
+          "allowVirtualNetworkAccess": true,
+          "allowForwardedTraffic": false,
+          "allowGatewayTransit": false,
+          "useRemoteGateways": false
+        }
+      ]
     }
   },
   "variables": {
@@ -40,7 +49,7 @@
         "name": "virtualNetworkPeerings",
         "count": "[if(equals(parameters('numberOfvirtualNetworkPeerings'),0),1, parameters('numberOfvirtualNetworkPeerings'))]",
         "input": {
-          "name": "[concat('test-',copyIndex('virtualNetworkPeerings'))]",
+          "name": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].name]",
           "properties": {
             "remoteVirtualNetwork": {
               "id": null
