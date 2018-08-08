@@ -47,7 +47,7 @@
     "copy": [
       {
         "name": "virtualNetworkPeerings",
-        "count": "[if(equals(parameters('numberOfvirtualNetworkPeerings'),0),1, parameters('numberOfvirtualNetworkPeerings'))]",
+        "count": "[if(equals(parameters('numberOfvirtualNetworkPeerings'),0),1, length(parameters('numberOfvirtualNetworkPeerings')))]",
         "input": {
           "name": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].name]",
           "properties": {
