@@ -73,6 +73,10 @@
     },
     "AdminPassword": {
       "type": "securestring"
+    },
+    "licenseType": {
+      "type": "string",
+      "defaultValue": "Windows_Server"
     }
   },
   "variables": {
