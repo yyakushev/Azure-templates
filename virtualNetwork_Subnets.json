@@ -24,6 +24,10 @@
         }
       ]
     },
+    "numberOfvirtualNetworkPeerings": {
+      "type": "int",
+      "defaultValue": 0
+    },
     "virtualNetworkPeerings": {
       "type": "array",
       "defaultValue": []
@@ -31,6 +35,25 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
+    "copy": [
+      {
+        "name": "virtualNetworkPeerings",
+        "count": "[if(equals(parameters('virtualNetworkPeerings'),0),1, parameters('virtualNetworkPeerings'))]",
+        "input": {
+          "name": "[concat('test-',copyIndex('virtualNetworkPeerings'))]",
+          "properties": {
+            "remoteVirtualNetwork": {
+              "id": null
+            },
+            "allowVirtualNetworkAccess": true,
+            "allowForwardedTraffic": true,
+            "allowGatewayTransit": false,
+            "useRemoteGateways": false
+          }
+        }
+      }
+    ]
+
   },
   "resources": [
     {
@@ -58,24 +81,9 @@
                 "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]"
               }
             }
-          },
-          {
-            "name": "virtualNetworkPeerings",
-            "count": "[length(parameters('virtualNetworkPeerings'))]",
-            "input": {
-              "name": "[concat('test-',copyIndex('virtualNetworkPeerings'))]",
-              "properties": {
-                "remoteVirtualNetwork": {
-                  "id": null
-                },
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": true,
-                "allowGatewayTransit": false,
-                "useRemoteGateways": false
-              }
-            }
           }
         ],
+        "virtualNetworkPeerings": "[if(equals(parameters('numberOfvirtualNetworkPeerings'),0),json('null'),variables('virtualNetworkPeerings'))]", //"[variables('virtualNetworkPeerings')]",
         "enableDdosProtection": false,
         "enableVmProtection": false
       },
