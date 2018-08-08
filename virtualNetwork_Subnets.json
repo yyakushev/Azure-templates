@@ -63,7 +63,7 @@
             "name": "virtualNetworkPeerings",
             "count": "[length(parameters('virtualNetworkPeerings'))]",
             "input": {
-              "name": "[concat('test-',copyIndex())]",
+              "name": "[concat('test-',copyIndex('virtualNetworkPeerings'))]",
               "properties": {
                 "remoteVirtualNetwork": {
                   "id": null
