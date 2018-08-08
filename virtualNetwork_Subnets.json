@@ -58,13 +58,13 @@
                 "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]"
               }
             }
-          }
-        ],
-        "copy": [
+          },
           {
             "name": "virtualNetworkPeerings",
             "count": "[length(parameters('virtualNetworkPeerings'))]",
-            "input": {"name": "[concat('test-',copyIndex())]"}
+            "input": {
+              "name": "[concat('test-',copyIndex())]"
+            }
           }
         ],
         "enableDdosProtection": false,
