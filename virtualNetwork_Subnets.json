@@ -26,9 +26,7 @@
     },
     "virtualNetworkPeerings": {
       "type": "array",
-      "defaultValue": [
-        {}
-      ]
+      "defaultValue": []
     }
   },
   "variables": {
@@ -65,7 +63,8 @@
         "copy": [
           {
             "name": "virtualNetworkPeerings",
-            "count": "[length(parameters('virtualNetworkPeerings'))]"
+            "count": "[length(parameters('virtualNetworkPeerings'))]",
+            "input": {}
           }
         ],
         "enableDdosProtection": false,
