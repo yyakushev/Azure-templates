@@ -53,11 +53,11 @@
       "type": "string",
       "defaultValue": "Standard_B1s"
     },
-    "numberOfDataDisks": {
+    "DataDisksExists": {
       "type": "int",
       "defaultValue": 0
     },
-    "dDisks": {
+    "dataDisks": {
       "type": "array",
       "defaultValue": [
         {
@@ -84,14 +84,14 @@
     "copy": [
       {
         "name": "Disks",
-        "count": "[if(equals(parameters('numberOfDataDisks'),0),1, parameters('numberOfDataDisks'))]",
+        "count": "[if(equals(parameters('DataDisksExists'),0),1, length(parameters('dataDisks')))]",
         "input": {
-          "name": "[concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd')]",
+          "name": "[concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd')]",
           "lun": "[copyIndex('Disks')]",
-          "createOption": "[parameters('dDisks')[copyIndex('Disks')].createOption]",
-          "diskSizeGB": "[parameters('dDisks')[copyIndex('Disks')].diskSizeGB]",
+          "createOption": "[parameters('dataDisks')[copyIndex('Disks')].createOption]",
+          "diskSizeGB": "[parameters('dataDisks')[copyIndex('Disks')].diskSizeGB]",
           "vhd": {
-            "uri": "[concat('https://',variables('StorageName'),'.blob.core.windows.net/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
+            "uri": "[concat('https://',variables('StorageName'),'.blob.core.windows.net/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
           }
         }
       }
@@ -205,7 +205,7 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-          "dataDisks": "[if(equals(parameters('numberOfDataDisks'),0),json('null'),variables('Disks'))]"
+          "dataDisks": "[if(equals(parameters('DataDisksExists'),0),json('null'),variables('Disks'))]"
         },
         "networkProfile": {
           "copy": [
