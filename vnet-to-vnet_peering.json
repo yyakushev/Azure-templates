@@ -18,7 +18,7 @@
         "name": "vNetRemote",
         "resourceGroup": "[resourceGroup().name]",
         "subscriptionID": "[split(resourceGroup().id,'/')[2]]",
-        "location": "[resourceGroup().location]",
+        "location": "[resourceGroup().location]"
       }
     }
   },
