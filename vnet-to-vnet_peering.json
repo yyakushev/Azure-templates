@@ -38,7 +38,7 @@
           "type": "virtualNetworkPeerings",
           "name": "[variables('vNetLocaltovNetRemotePeeringName')]",
           "location": "[resourceGroup().location]",
-          "dependsOn": [ "[resourceId('Microsoft.Network/virtualNetworks',parameters('vNetLocal').name)]" ],
+          "dependsOn": [ "[parameters('vNetLocal').name]" ],
           "comments": "This is the peering from vNet 1 to vNet 2",
           "properties": {
             "allowVirtualNetworkAccess": "[parameters('vNetLocal').allowVirtualNetworkAccess]",
