@@ -23,13 +23,13 @@
     }
   },
   "variables": {
-    "vNetLocaltovNetRemotePeeringName": "[concat(parameters('vNetLocal').name, '-', parameters('vNetRemote').name)]",
+    "vNetLocaltovNetRemotePeeringName": "[concat(parameters('vNetLocal').name, '-', parameters('vNetRemote').name)]"
   },
   "resources": [
     {
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('vNetLocal')]",
+      "name": "[parameters('vNetLocal').name]",
       "location": "[resourceGroup().location]",
       "comments": "This is the first vNet",
       "resources": [
