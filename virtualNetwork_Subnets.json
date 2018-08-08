@@ -52,12 +52,12 @@
           "name": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].name]",
           "properties": {
             "remoteVirtualNetwork": {
-              "id": null
+              "id": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].remoteVirtualNetwork]"
             },
-            "allowVirtualNetworkAccess": true,
-            "allowForwardedTraffic": true,
-            "allowGatewayTransit": false,
-            "useRemoteGateways": false
+            "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].allowVirtualNetworkAccess]",
+            "allowForwardedTraffic": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].allowForwardedTraffic]",
+            "allowGatewayTransit": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].allowGatewayTransit]",
+            "useRemoteGateways": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].useRemoteGateways]"
           }
         }
       }
