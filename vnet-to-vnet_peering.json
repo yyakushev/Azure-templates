@@ -1,40 +1,29 @@
 ﻿{
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "vNetLocal": {
-        "type": "object",
-        "defaultValue": {
-          "name": "vNetLocal",
-          "allowVirtualNetworkAccess": "true",
-          "allowForwardedTraffic": "false",
-          "allowGatewayTransit": "false",
-          "useRemoteGateways": "false"
-        },
-        "metadata": {
-          "description": "Name for vNet 1"
-        }
-      },
-        "vNetRemote": {
-          "type": "object",
-          "defaultValue": {
-            "name": "vNetRemote",
-            "resourceGroup": "[resourceGroup().name]",
-            "subscriptionID": "[split(resourceGroup().id,'/')[2]]",
-            "location": "[resourceGroup().location]",
-            "allowVirtualNetworkAccess": "true",
-            "allowForwardedTraffic": "false",
-            "allowGatewayTransit": "false",
-            "useRemoteGateways": "false"
-          },
-            "metadata": {
-                "description": "Name for vNet 2"
-            }
-        }
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vNetLocal": {
+      "type": "object",
+      "defaultValue": {
+        "name": "vNetLocal",
+        "allowVirtualNetworkAccess": "true",
+        "allowForwardedTraffic": "false",
+        "allowGatewayTransit": "false",
+        "useRemoteGateways": "false"
+      }
     },
+    "vNetRemote": {
+      "type": "object",
+      "defaultValue": {
+        "name": "vNetRemote",
+        "resourceGroup": "[resourceGroup().name]",
+        "subscriptionID": "[split(resourceGroup().id,'/')[2]]",
+        "location": "[resourceGroup().location]",
+      }
+    }
+  },
   "variables": {
     "vNetLocaltovNetRemotePeeringName": "[concat(parameters('vNetLocal').name, '-', parameters('vNetRemote').name)]",
-    "vNetRemotetovNetLocalPeeringName": "[concat(parameters('vNetRemote').name, '-', parameters('vNetLocal').name)]"
   },
   "resources": [
     {
@@ -57,38 +46,8 @@
             "allowGatewayTransit": "[parameters('vNetLocal').allowGatewayTransit]",
             "useRemoteGateways": "[parameters('vNetLocal').useRemoteGateways]",
             "remoteVirtualNetwork": {
-              "id": "[resourceId(parameters('vNetRemote').SubscriptionID, parameters('vNetRemote').ResourceGroup, 'Microsoft.Network/virtualNetworks', parameters('vNetRemote').name)]"
+              "id": "[resourceId(parameters('vNetRemote').subscriptionID, parameters('vNetRemote').resourceGroup, 'Microsoft.Network/virtualNetworks', parameters('vNetRemote').name)]"
               //"[resourceId('Microsoft.Network/virtualNetworks',parameters('vNetRemote'))]"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "apiVersion": "2016-03-30",
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('vNetRemote').name]",
-      "location": "[parameters('vNetRemote').location]",
-      "subscriptionId": "[parameters('vNetRemote').SubscriptionID]",
-      "resourceGroup": "[parameters('vNetRemote').ResourceGroup]",
-      "comments": "This is the second vNet",
-      "resources": [
-        {
-          "apiVersion": "2016-06-01",
-          "type": "virtualNetworkPeerings",
-          "name": "[variables('vNetRemotetovNetLocalPeeringName')]",
-          "location": "[parameters('vNetRemote').location]",
-          "subscriptionId": "[parameters('vNetRemote').SubscriptionID]",
-          "resourceGroup": "[parameters('vNetRemote').ResourceGroup]",
-          "dependsOn": [],
-          "comments": "This is the peering from vNet 2 to vNet 1",
-          "properties": {
-            "allowVirtualNetworkAccess": "[parameters('vNetRemote').allowVirtualNetworkAccess]",
-            "allowForwardedTraffic": "[parameters('vNetRemote').allowForwardedTraffic]",
-            "allowGatewayTransit": "[parameters('vNetRemote').allowGatewayTransit]",
-            "useRemoteGateways": "[parameters('vNetRemote').useRemoteGateways]",
-            "remoteVirtualNetwork": {
-              "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vNetLocal').name)]"
             }
           }
         }
