@@ -24,10 +24,6 @@
         }
       ]
     },
-    "virtualNetworkPeeringsExist": {
-      "type": "int",
-      "defaultValue": 0
-    },
     "virtualNetworkPeerings": {
       "type": "array",
       "defaultValue": [
