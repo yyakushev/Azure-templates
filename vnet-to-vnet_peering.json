@@ -32,14 +32,11 @@
       "name": "[parameters('vNetLocal').name]",
       "location": "[resourceGroup().location]",
       "comments": "This is the first vNet",
-      "resources": [
-        {
-          "apiVersion": "2016-06-01",
-          "type": "virtualNetworkPeerings",
+      "properties": {
+        "addressSpace": null,
+        "subnets": null,
+        "virtualNetworkPeerings": {
           "name": "[variables('vNetLocaltovNetRemotePeeringName')]",
-          "location": "[resourceGroup().location]",
-          "dependsOn": [ "[parameters('vNetLocal').name]" ],
-          "comments": "This is the peering from vNet 1 to vNet 2",
           "properties": {
             "allowVirtualNetworkAccess": "[parameters('vNetLocal').allowVirtualNetworkAccess]",
             "allowForwardedTraffic": "[parameters('vNetLocal').allowForwardedTraffic]",
@@ -51,7 +48,7 @@
             }
           }
         }
-      ]
+      }
     }
   ]
 }
