@@ -60,7 +60,12 @@
             }
           }
         ],
-        "virtualNetworkPeerings": "[parameters('virtualNetworkPeerings')]",
+        "copy": [
+          {
+            "name": "virtualNetworkPeerings",
+            "count": "[length(parameters('virtualNetworkPeerings'))]"
+          }
+        ],
         "enableDdosProtection": false,
         "enableVmProtection": false
       },
