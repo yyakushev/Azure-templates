@@ -46,18 +46,18 @@
     "location": "[resourceGroup().location]",
     "copy": [
       {
-        "name": "virtualNetworkPeerings",
+        "name": "copyvNetPeers",
         "count": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),1, length(parameters('virtualNetworkPeerings')))]",
         "input": {
-          "name": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].name]",
+          "name": "[parameters('virtualNetworkPeerings')[copyIndex('copyvNetPeers')].name]",
           "properties": {
             "remoteVirtualNetwork": {
-              "id": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].remoteVirtualNetwork]"
+              "id": "[parameters('virtualNetworkPeerings')[copyIndex('copyvNetPeers')].remoteVirtualNetwork]"
             },
-            "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].allowVirtualNetworkAccess]",
-            "allowForwardedTraffic": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].allowForwardedTraffic]",
-            "allowGatewayTransit": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].allowGatewayTransit]",
-            "useRemoteGateways": "[parameters('virtualNetworkPeerings')[copyIndex('virtualNetworkPeerings')].useRemoteGateways]"
+            "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings')[copyIndex('copyvNetPeers')].allowVirtualNetworkAccess]",
+            "allowForwardedTraffic": "[parameters('virtualNetworkPeerings')[copyIndex('copyvNetPeers')].allowForwardedTraffic]",
+            "allowGatewayTransit": "[parameters('virtualNetworkPeerings')[copyIndex('copyvNetPeers')].allowGatewayTransit]",
+            "useRemoteGateways": "[parameters('virtualNetworkPeerings')[copyIndex('copyvNetPeers')].useRemoteGateways]"
           }
         }
       }
@@ -92,7 +92,7 @@
             }
           }
         ],
-        "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('virtualNetworkPeerings'))]", //"[variables('virtualNetworkPeerings')]",
+        "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('copyvNetPeers'))]", //"[variables('virtualNetworkPeerings')]",
         "enableDdosProtection": false,
         "enableVmProtection": false
       },
