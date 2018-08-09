@@ -144,6 +144,7 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "2018-02-01",
       "dependsOn": [
+        "publiIPPCopy"
         // "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]"
       ],
       "tags": {},
