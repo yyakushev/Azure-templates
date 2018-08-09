@@ -113,9 +113,9 @@
       "kind": "Storage"
     },
     {
-      "condition": "[equals(parameters('nics')[copyIndex()].publicIPAddress,'true')]",
+      "condition": "[equals(parameters('nics')[copyIndex('publiIPCopy')].publicIPAddress,'true')]",
       "apiVersion": "2018-02-01",
-      "name": "[concat('public-ip-linked-template',copyIndex())]",
+      "name": "[concat('public-ip-linked-template',copyIndex('publiIPCopy'))]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
@@ -133,7 +133,7 @@
         }
       },
       "copy": {
-        "name": "publiIPPCopy",
+        "name": "publiIPCopy",
         "count": "[length(parameters('nics'))]"
       },
       "dependsOn": []
@@ -144,7 +144,7 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "2018-02-01",
       "dependsOn": [
-        "publiIPPCopy"
+        "publiIPCopy"
         // "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]"
       ],
       "tags": {},
@@ -179,7 +179,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('StorageName'))]",
         "nics-copy",
-        "publiIPPCopy"
+        "publiIPCopy"
       ],
       "tags": {},
       "properties": {
