@@ -76,6 +76,7 @@
       "dependsOn": []
     },
     {
+      "condition": "[greater(length(parameters('virtualNetworkPeerings')),0)]",
       "apiVersion": "2016-06-01",
       "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
       "name": "[concat(parameters('virtualNetwork').Name,'/',parameters('virtualNetworkPeerings')[copyIndex()].name)]",
