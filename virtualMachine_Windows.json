@@ -183,7 +183,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('StorageName'))]",
         "nics-copy",
-        "publiIPPCopy"
+        "publiIPCopy"
       ],
       "tags": {},
       "properties": {
