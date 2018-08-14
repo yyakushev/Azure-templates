@@ -1,0 +1,51 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "type": "string",
+      "defaultValue": "vmname"
+    },
+    "configuration": {
+      "type": "object",
+      "defaultValue": {
+        "url": "http://github/modules/script.zip",
+        "script": "ScriptName.ps1",
+        "function": "ConfigurationName"
+      }
+    },
+    "configurationArguments": {
+      "type": "object",
+      "defaultValue": ""
+    },
+    "protectedSettings": {
+      "type": "object",
+      "defaultValue": ""
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {},
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.9",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "configuration": "[parameters('configuration')]",
+          "configurationArguments": "[parameters('configurationArguments')]"
+        },
+        "protectedSettings": "[parameters('protectedSettings')]"
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
