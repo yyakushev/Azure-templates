@@ -49,12 +49,12 @@
         "name": "copyvNetPeerings",
         "count": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),1, length(parameters('virtualNetworkPeerings')))]",
         "input": {
-          "name": "[parameters('virtualNetworkPeerings').name]",
-          "remoteVirtualNetwork": "[parameters('virtualNetworkPeerings').remoteVirtualNetwork]",
-          "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings').allowVirtualNetworkAccess]",
-          "allowForwardedTraffic": "[parameters('virtualNetworkPeerings').allowForwardedTraffic]",
-          "allowGatewayTransit": "[parameters('virtualNetworkPeerings').allowGatewayTransit]",
-          "useRemoteGateways": "[parameters('virtualNetworkPeerings').useRemoteGateways]"
+          "name": "[parameters('virtualNetworkPeerings')[copyIndex()].name]",
+          "remoteVirtualNetwork": "[parameters('virtualNetworkPeerings')[copyIndex()].remoteVirtualNetwork]",
+          "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings')[copyIndex()].allowVirtualNetworkAccess]",
+          "allowForwardedTraffic": "[parameters('virtualNetworkPeerings')[copyIndex()].allowForwardedTraffic]",
+          "allowGatewayTransit": "[parameters('virtualNetworkPeerings')[copyIndex()].allowGatewayTransit]",
+          "useRemoteGateways": "[parameters('virtualNetworkPeerings')[copyIndex()].useRemoteGateways]"
         }
       }
     ]
