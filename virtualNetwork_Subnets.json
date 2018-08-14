@@ -24,6 +24,10 @@
         }
       ]
     },
+    "virtualNetworkPeeringsExist": {
+      "type": "int",
+      "defaultValue": 0
+    },
     "virtualNetworkPeerings": {
       "type": "array",
       "defaultValue": [
@@ -40,6 +44,20 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
+    "copy": [
+      {
+        "name": "copyvNetPeerings",
+        "count": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),1, length(parameters('virtualNetworkPeerings')))]",
+        "input": {
+          "name": "[parameters('virtualNetworkPeerings').name]",
+          "remoteVirtualNetwork": "[parameters('virtualNetworkPeerings').remoteVirtualNetwork]",
+          "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings').allowVirtualNetworkAccess]",
+          "allowForwardedTraffic": "[parameters('virtualNetworkPeerings').allowForwardedTraffic]",
+          "allowGatewayTransit": "[parameters('virtualNetworkPeerings').allowGatewayTransit]",
+          "useRemoteGateways": "[parameters('virtualNetworkPeerings').useRemoteGateways]"
+        }
+      }
+    ]
   },
   "resources": [
     {
@@ -71,33 +89,10 @@
         ],
         //        "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('copyvNetPeers'))]", //"[variables('virtualNetworkPeerings')]",
         "enableDdosProtection": false,
-        "enableVmProtection": false
+        "enableVmProtection": false,
+        "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('copyvNetPeerings'))]"
       },
       "dependsOn": []
-    },
-    {
-      "condition": "[greater(length(parameters('virtualNetworkPeerings')),0)]",
-      "apiVersion": "2016-06-01",
-      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-      "name": "[concat(parameters('virtualNetwork').Name,'/',parameters('virtualNetworkPeerings')[copyIndex()].name)]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[parameters('virtualNetwork').Name]"
-      ],
-      "comments": "This is the peering from vNet 1 to vNet 2",
-      "properties": {
-        "allowVirtualNetworkAccess": "[parameters('virtualNetworkPeerings')[copyIndex()].allowVirtualNetworkAccess]",
-        "allowForwardedTraffic": "[parameters('virtualNetworkPeerings')[copyIndex()].allowForwardedTraffic]",
-        "allowGatewayTransit": "[parameters('virtualNetworkPeerings')[copyIndex()].allowGatewayTransit]",
-        "useRemoteGateways": "[parameters('virtualNetworkPeerings')[copyIndex()].useRemoteGateways]",
-        "remoteVirtualNetwork": {
-          "id": "[parameters('virtualNetworkPeerings')[copyIndex()].remoteVirtualNetwork]"
-        }
-      },
-      "copy": {
-        "name": "CopyvNetPeers",
-        "count": "[length(parameters('virtualNetworkPeerings'))]"
-      }
     }
   ],
   "outputs": {
