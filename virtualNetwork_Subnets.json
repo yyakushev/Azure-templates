@@ -96,7 +96,7 @@
       },
       "copy": {
         "name": "CopyvNetPeers",
-        "count": "[if(equals(length(parameters('virtualNetworkPeerings')),0),1,parameters('virtualNetworkPeerings'))]"
+        "count": "[length(parameters('virtualNetworkPeerings'))]"
       }
     }
   ],
