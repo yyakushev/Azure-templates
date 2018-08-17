@@ -6,23 +6,21 @@
       "type": "string",
       "defaultValue": "vmname"
     },
-    "settings": {
+    "configuration": {
       "type": "object",
       "defaultValue": {
-        "protectedSettings": null,
-        "publicSettings": {
-          "configuration": {
-              "url": "http://github/modules/script.zip",
-              "script": "ScriptName.ps1",
-              "function": "ConfigurationName"
-          },
-          "configurationArguments": null
-        }
+        "url": "http://github/modules/script.zip",
+        "script": "ScriptName.ps1",
+        "function": "ConfigurationName"
       }
     },
-    "autoUpgradeMinorVersion": {
-      "type": "bool",
-      "defaultValue": true
+    "configurationArguments": {
+      "type": "object",
+      "defaultValue": ""
+    },
+    "protectedSettings": {
+      "type": "object",
+      "defaultValue": ""
     }
   },
   "variables": {
@@ -38,9 +36,13 @@
       "properties": {
         "publisher": "Microsoft.Powershell",
         "type": "DSC",
-        "typeHandlerVersion": "2.76",
-        "autoUpgradeMinorVersion": "[parameters('autoUpgradeMinorVersion')]",
-        "settings": "[parameters('settings')]"
+        "typeHandlerVersion": "2.9",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "configuration": "[parameters('configuration')]",
+          "configurationArguments": "[parameters('configurationArguments')]"
+        },
+        "protectedSettings": "[parameters('protectedSettings')]"
       }
     }
   ],
