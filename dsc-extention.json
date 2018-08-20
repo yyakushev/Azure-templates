@@ -6,16 +6,13 @@
       "type": "string",
       "defaultValue": "vmname"
     },
-    "DscUpdateTagVersion": {
-      "type": "string",
-      "defaultValue": null
-    },
     "configuration": {
       "type": "object",
       "defaultValue": {
         "url": "http://github/modules/script.zip",
         "script": "ScriptName.ps1",
-        "function": "ConfigurationName"
+        "function": "ConfigurationName",
+        "DscUpdateTagVersion": null
       }
     },
     "configurationArguments": {
@@ -42,7 +39,7 @@
         "type": "DSC",
         "typeHandlerVersion": "2.9",
         "autoUpgradeMinorVersion": true,
-        "forceUpdateTag": "[parameters('DscUpdateTagVersion')]",
+        "forceUpdateTag": "[parameters('configuration').DscUpdateTagVersion]",
         "settings": {
           "configuration": "[parameters('configuration')]",
           "configurationArguments": "[parameters('configurationArguments')]"
