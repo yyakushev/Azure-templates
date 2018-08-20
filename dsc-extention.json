@@ -6,6 +6,10 @@
       "type": "string",
       "defaultValue": "vmname"
     },
+    "DscUpdateTagVersion": {
+      "type": "string",
+      "defaultValue": null
+    },
     "configuration": {
       "type": "object",
       "defaultValue": {
@@ -38,6 +42,7 @@
         "type": "DSC",
         "typeHandlerVersion": "2.9",
         "autoUpgradeMinorVersion": true,
+        "forceUpdateTag": "[parameters('DscUpdateTagVersion')]",
         "settings": {
           "configuration": "[parameters('configuration')]",
           "configurationArguments": "[parameters('configurationArguments')]"
