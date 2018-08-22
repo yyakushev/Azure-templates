@@ -6,7 +6,7 @@
       "type": "object",
       "defaultValue": {
         "Name": "[concat('Project','-vnet')]",
-        "AddressPrefix": "10.203.0.0/24"
+        "AddressPrefix": "10.2.0.0/24"
       }
     },
     "Subnets": {
@@ -14,12 +14,12 @@
       "defaultValue": [
         {
           "SubnetName": "GatewaySubnet",
-          "AddressPrefix": "10.203.0.224/27",
+          "AddressPrefix": "10.2.0.224/27",
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         },
         {
           "SubnetName": "[concat('subnet-','01')]",
-          "AddressPrefix": "10.203.0.0/25",
+          "AddressPrefix": "10.2.0.0/25",
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         }
       ]
