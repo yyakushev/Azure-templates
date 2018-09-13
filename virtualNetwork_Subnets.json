@@ -9,6 +9,12 @@
         "AddressPrefix": "10.2.0.0/24"
       }
     },
+    "dhcpOptions": {
+      "type": "object",
+      "defaultValue": {
+        "dnsServers": []
+      }
+    },
     "Subnets": {
       "type": "array",
       "defaultValue": [
@@ -73,6 +79,7 @@
             "[parameters('virtualNetwork').AddressPrefix]"
           ]
         },
+        "dhcpOptions": "[parameters('dhcpOptions')]" ,
         "copy": [
           {
             "name": "Subnets",
