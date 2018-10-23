@@ -1,0 +1,64 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "templateUri": {
+      "type": "string"
+    },
+    "lbname": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "Basic"
+    },
+    "pipname": {
+      "type": "string"
+    },
+    "publicIPAllocationMethod": {
+      "type": "string",
+      "defaultValue": "Static"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-02-01",
+      "name": "lb-pip-linked-template",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('templateUri'),'public-ip.json')]", //"https://raw.githubusercontent.com/yyakushev/Azure-templates/master/public-ip.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "pipname": { "value": "[parameters('pipname')]" },
+          "publicIPAllocationMethod": { "value": "[parameters('publicIPAllocationMethod')]" }
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "apiVersion": "2018-08-01",
+      "name": "[parameters('lbname')]",
+      "type": "Microsoft.Network/loadBalancers",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
+      "dependsOn": [ "lb-pip-linked-template" ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "LoadBalancerFrontEnd",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('pipname'))]"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
