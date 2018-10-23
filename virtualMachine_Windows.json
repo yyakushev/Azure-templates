@@ -18,6 +18,7 @@
           "privateIPAddress": null, //required if allocation is static
           "publicIPAllocationMethod": "Dynamic", //required if publicIPaddress is true
           "publicIPAddress": "false",
+          "loadBalancerInboundNatRules": null,
           "dnsServers": []
         }
       ]
@@ -162,7 +163,8 @@
               "publicIPAddress": "[if(equals(parameters('nics')[copyIndex()].publicIPAddress,'true'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('VMName'),'-',parameters('nics')[copyIndex()].namepreffix,'-nic',copyIndex(),'-pip')),'\"}')),json('null'))]",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').virtualNetworkName, parameters('nics')[copyIndex()].SubnetName)]"
-              }
+              },
+              "loadBalancerInboundNatRules": "[parameters('nics')[copyIndex()].loadBalancerInboundNatRules]"
             }
           }
         ],
