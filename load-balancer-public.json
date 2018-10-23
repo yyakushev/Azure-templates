@@ -115,12 +115,12 @@
       "name": "[parameters('nicname')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[copyIndex('lbNatLoop')].name)]"
+        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[length(parameters('inboundNATrules'))].name)]"
       ],
-      "copy": {
-        "name": "lbNatLoop",
-        "count": "[length(parameters('inboundNATrules'))]"
-      },
+      //"copy": {
+      //  "name": "lbNatLoop",
+      //  "count": "[length(parameters('inboundNATrules'))]"
+      //},
       "properties": {
         "ipConfigurations": [
           {
