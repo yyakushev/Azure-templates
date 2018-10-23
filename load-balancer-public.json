@@ -115,7 +115,7 @@
       "name": "[parameters('nicname')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[sub(length(parameters('inboundNATrules')),'1')].name)]"
+        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[sub(length(parameters('inboundNATrules')),1)].name)]"
       ],
       "properties": {
         "ipConfigurations": [
