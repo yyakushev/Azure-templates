@@ -47,7 +47,7 @@
     //create a public ip for lb
     {
       "apiVersion": "2018-02-01",
-      "name": "lb-pip-linked-template",
+      "name": "[concat('lb-',parameters('pipname'),'-linked-template')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
