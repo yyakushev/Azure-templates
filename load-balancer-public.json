@@ -18,9 +18,25 @@
     "publicIPAllocationMethod": {
       "type": "string",
       "defaultValue": "Static"
+    },
+    "nicname": {
+      "type": "string",
+      "defaultValue": "nic"
+    },
+    "inboundNATrules": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "name": "rdp-enable",
+          "protocol": "tcp",
+          "frontendPort": "3389",
+          "backendPort": "3389"
+        }
+      ]
     }
   },
   "resources": [
+    //create a public ip for lb
     {
       "apiVersion": "2018-02-01",
       "name": "lb-pip-linked-template",
@@ -38,6 +54,7 @@
       },
       "dependsOn": []
     },
+    //create the lb
     {
       "apiVersion": "2018-08-01",
       "name": "[parameters('lbname')]",
@@ -55,6 +72,62 @@
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('pipname'))]"
               }
+            }
+          }
+        ]
+      }
+    },
+    //create NAT rules for lb
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/loadBalancers/inboundNatRules",
+      "name": "[concat(parameters('lbName'), '/', parameters('inboundNATrules')[copyIndex('lbNatLoop')].name)]",
+      "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "lbNatLoop",
+        "count": "[length(parameters('inboundNATrules'))]"
+      },
+      "dependsOn": [
+        "[parameters('lbname')]"
+      ],
+      "properties": {
+        "frontendIPConfiguration": {
+          "id": "[resourceId('Microsoft.Network/loadBalancers',parameters('lbName'),'frontendIPConfigurations','loadBalancerFrontend')]"
+        },
+        "protocol": "[parameters('inboundNATrules')[copyIndex('lbNatLoop')].protocol]",
+        "frontendPort": "[parameters('inboundNATrules')[copyIndex('lbNatLoop')].frontendPort]",
+        "backendPort": "[parameters('inboundNATrules')[copyIndex('lbNatLoop')].backendPort]",
+        "enableFloatingIP": false
+      }
+    },
+    //add lb rules to the nic
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[parameters('nicname')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[copyIndex('lbNatLoop')].name)]"
+      ],
+      "copy": {
+        "name": "lbNatLoop",
+        "count": "[length(parameters('inboundNATrules'))]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "loadBalancerInboundNatRules": null,
+              "copy": [
+                {
+                  "name": "inboundNATrulesLoop",
+                  "count": "[length(parameters('inboundNATrules'))]",
+                  "input": {
+                    "id": "[resourceId('Microsoft.Network/loadBalancers', parameters('lbName'),'inboundNatRules', parameters('inboundNATrules')[copyIndex()].name)]"
+                  }
+                }
+              ]
             }
           }
         ]
