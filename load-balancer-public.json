@@ -117,10 +117,6 @@
       "dependsOn": [
         "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[length(parameters('inboundNATrules'))].name)]"
       ],
-      //"copy": {
-      //  "name": "lbNatLoop",
-      //  "count": "[length(parameters('inboundNATrules'))]"
-      //},
       "properties": {
         "ipConfigurations": [
           {
@@ -134,7 +130,7 @@
                   "name": "inboundNATrulesLoop",
                   "count": "[length(parameters('inboundNATrules'))]",
                   "input": {
-                    "id": "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex()].name)]"
+                    "id": "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex('inboundNATrulesLoop')].name)]"
                   }
                 }
               ]
