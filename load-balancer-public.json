@@ -23,6 +23,14 @@
       "type": "string",
       "defaultValue": "nic"
     },
+    "nicsubnet": {
+      "type": "string",
+      "defaultValue": "nicsubnet"
+    },
+    "nicvnet": {
+      "type": "string",
+      "defaultValue": "nicvnet"
+    },
     "inboundNATrules": {
       "type": "array",
       "defaultValue": [
@@ -99,39 +107,41 @@
         "backendPort": "[parameters('inboundNATrules')[copyIndex('lbNatLoop')].backendPort]",
         "enableFloatingIP": false
       }
-    }//,
+    },
     //add lb rules to the nic
-    //{
-    //  "apiVersion": "2015-06-15",
-    //  "type": "Microsoft.Network/networkInterfaces",
-    //  "name": "[parameters('nicname')]",
-    //  "location": "[resourceGroup().location]",
-    //  "dependsOn": [
-    //    "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[copyIndex('lbNatLoop')].name)]"
-    //  ],
-    //  "copy": {
-    //    "name": "lbNatLoop",
-    //    "count": "[length(parameters('inboundNATrules'))]"
-    //  },
-    //  "properties": {
-    //    "ipConfigurations": [
-    //      {
-    //        "name": "ipconfig1",
-    //        "properties": {
-    //          "loadBalancerInboundNatRules": null,
-    //          "copy": [
-    //            {
-    //              "name": "inboundNATrulesLoop",
-    //              "count": "[length(parameters('inboundNATrules'))]",
-    //              "input": {
-    //                "id": "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex()].name)]"
-    //              }
-    //            }
-    //          ]
-    //        }
-    //      }
-    //    ]
-    //  }
-    //}
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[parameters('nicname')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'), '/inboundNatRules/', parameters('inboundNATrules')[copyIndex('lbNatLoop')].name)]"
+      ],
+      "copy": {
+        "name": "lbNatLoop",
+        "count": "[length(parameters('inboundNATrules'))]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('nicvnet'), parameters('nicsubnet')]"
+              },
+              "copy": [
+                {
+                  "name": "inboundNATrulesLoop",
+                  "count": "[length(parameters('inboundNATrules'))]",
+                  "input": {
+                    "id": "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex()].name)]"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
   ]
 }
