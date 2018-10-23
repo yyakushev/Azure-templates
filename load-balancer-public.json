@@ -125,15 +125,17 @@
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('nicvnet'), parameters('nicsubnet'))]"
               },
-              "copy": [
-                {
-                  "name": "inboundNATrulesLoop",
-                  "count": "[length(parameters('inboundNATrules'))]",
-                  "input": {
-                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('lbName')),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex('inboundNATrulesLoop')].name)]"
+              "loadBalancerInboundNatRules": {
+                "copy": [
+                  {
+                    "name": "inboundNATrulesLoop",
+                    "count": "[length(parameters('inboundNATrules'))]",
+                    "input": {
+                      "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('lbName')),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex('inboundNATrulesLoop')].name)]"
+                    }
                   }
-                }
-              ]
+                ]
+              }
             }
           }
         ]
