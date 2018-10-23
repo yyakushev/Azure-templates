@@ -127,7 +127,7 @@
             "name": "ipconfig1",
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('nicvnet'), parameters('nicsubnet')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('nicvnet'), parameters('nicsubnet'))]"
               },
               "copy": [
                 {
