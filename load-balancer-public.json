@@ -92,7 +92,7 @@
       ],
       "properties": {
         "frontendIPConfiguration": {
-          "id": "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'),'/frontendIPConfigurations/loadBalancerFrontend')]"
+          "id": "[concat(resourceId('Microsoft.Network/loadBalancers',parameters('lbName')),'/frontendIPConfigurations/loadBalancerFrontend')]"
         },
         "protocol": "[parameters('inboundNATrules')[copyIndex('lbNatLoop')].protocol]",
         "frontendPort": "[parameters('inboundNATrules')[copyIndex('lbNatLoop')].frontendPort]",
