@@ -130,7 +130,7 @@
                   "name": "inboundNATrulesLoop",
                   "count": "[length(parameters('inboundNATrules'))]",
                   "input": {
-                    "id": "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex('inboundNATrulesLoop')].name)]"
+                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('lbName')),'/inboundNatRules/', parameters('inboundNATrules')[copyIndex('inboundNATrulesLoop')].name)]"
                   }
                 }
               ]
