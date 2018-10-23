@@ -71,7 +71,7 @@
       "sku": {
         "name": "[parameters('sku')]"
       },
-      "dependsOn": [ "lb-pip-linked-template" ],
+      "dependsOn": [ "concat('lb-'", "parameters('pipname')", "'-linked-template')" ],
       "properties": {
         "frontendIPConfigurations": [
           {
