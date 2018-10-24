@@ -51,7 +51,7 @@
                 "sourceAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefix]",
                 "sourceAddressPrefixes": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefixes]",
                 "destinationAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefix]",
-                "destinationAddressPrefixes": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefixes]",
+                //"destinationAddressPrefixes": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefixes]",
                 "destinationApplicationSecurityGroups": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationApplicationSecurityGroups]",
                 "access": "[parameters('securityGroupRules')[copyIndex('securityRules')].access]",
                 "priority": "[parameters('securityGroupRules')[copyIndex('securityRules')].priority]",
