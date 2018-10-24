@@ -17,6 +17,7 @@
           "sourceAddressPrefix": null,
           "sourceAddressPrefixes": null,
           "destinationAddressPrefix": "VirtualNetwork",
+          "destinationAddressPrefixes": null,
           "access": "Allow",
           "priority": 100,
           "direction": "Inbound"
@@ -49,6 +50,7 @@
                 "sourceAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefix]",
                 "sourceAddressPrefixes": "[parameters('securityGroupRules')[copyIndex('securityRules')].sourceAddressPrefixes]",
                 "destinationAddressPrefix": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefix]",
+                "destinationAddressPrefixes": "[parameters('securityGroupRules')[copyIndex('securityRules')].destinationAddressPrefixes]",
                 "access": "[parameters('securityGroupRules')[copyIndex('securityRules')].access]",
                 "priority": "[parameters('securityGroupRules')[copyIndex('securityRules')].priority]",
                 "direction": "[parameters('securityGroupRules')[copyIndex('securityRules')].direction]"
