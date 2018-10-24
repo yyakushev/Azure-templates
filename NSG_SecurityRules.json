@@ -15,9 +15,9 @@
           "sourcePortRange": "*",
           "destinationPortRange": "*",
           "sourceAddressPrefix": null,
-          "sourceAddressPrefixes": null,
+          "sourceAddressPrefixes": [],
           "destinationAddressPrefix": "VirtualNetwork",
-          "destinationAddressPrefixes": null,
+          "destinationAddressPrefixes": [],
           "access": "Allow",
           "priority": 100,
           "direction": "Inbound"
