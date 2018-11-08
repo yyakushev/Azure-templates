@@ -44,15 +44,14 @@
     }
   },
   "resources": [
-    //create a public ip for lb
     {
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2015-06-15",
       "name": "[concat('lb-',parameters('pipname'),'-linked-template')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('templateUri'),'public-ip.json')]", //"https://raw.githubusercontent.com/yyakushev/Azure-templates/master/public-ip.json",
+          "uri": "[concat(parameters('templateUri'),'public-ip.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -62,16 +61,17 @@
       },
       "dependsOn": []
     },
-    //create the lb
     {
-      "apiVersion": "2018-08-01",
+      "apiVersion": "2015-06-15",
       "name": "[parameters('lbname')]",
       "type": "Microsoft.Network/loadBalancers",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "[parameters('sku')]"
       },
-      "dependsOn": [ "[concat('lb-',parameters('pipname'),'-linked-template')]" ],
+      "dependsOn": [
+        "[concat('lb-',parameters('pipname'),'-linked-template')]"
+      ],
       "properties": {
         "frontendIPConfigurations": [
           {
@@ -85,7 +85,6 @@
         ]
       }
     },
-    //create NAT rules for lb
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/loadBalancers/inboundNatRules",
@@ -108,7 +107,6 @@
         "enableFloatingIP": false
       }
     },
-    //add lb rules to the nic
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",

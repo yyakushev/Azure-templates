@@ -15,8 +15,8 @@
           "namepreffix": "local",
           "SubnetName": "subnet",
           "privateIPAllocationMethod": "Dynamic",
-          "privateIPAddress": null, //required if allocation is static
-          "publicIPAllocationMethod": "Dynamic", //required if publicIPaddress is true
+          "privateIPAddress": null, 
+          "publicIPAllocationMethod": "Dynamic", 
           "publicIPAddress": "false",
           "loadBalancerInboundNatRules": null,
           "dnsServers": []
@@ -107,7 +107,7 @@
       "name": "[variables('StorageName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2016-01-01",
       "sku": {
         "name": "[parameters('StorageType')]"
       },
@@ -147,10 +147,9 @@
       "name": "[concat(parameters('VMName'),'-',parameters('nics')[copyIndex()].namepreffix,'-nic',copyIndex())]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2015-06-15",
       "dependsOn": [
         "publiIPCopy"
-        // "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').virtualNetworkName)]"
       ],
       "tags": {},
       "properties": {
@@ -181,7 +180,7 @@
       "name": "[parameters('VMName')]",
       "type": "Microsoft.Compute/virtualMachines",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2017-03-30",
+      "apiVersion": "2015-06-15",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('StorageName'))]",
         "nics-copy",

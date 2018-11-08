@@ -27,7 +27,7 @@
         "tier": "Regional"
       },
       "name": "[parameters('pipname')]",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2015-06-15",
       "location": "[variables('location')]",
       "scale": null,
       "properties": {

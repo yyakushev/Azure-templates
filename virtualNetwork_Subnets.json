@@ -6,7 +6,7 @@
       "type": "object",
       "defaultValue": {
         "Name": "[concat('Project','-vnet')]",
-        "AddressPrefix": "10.2.0.0/24"
+        "AddressPrefix": "10.203.0.0/24"
       }
     },
     "dhcpOptions": {
@@ -20,12 +20,12 @@
       "defaultValue": [
         {
           "SubnetName": "GatewaySubnet",
-          "AddressPrefix": "10.2.0.224/27",
+          "AddressPrefix": "10.203.0.224/27",
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         },
         {
           "SubnetName": "[concat('subnet-','01')]",
-          "AddressPrefix": "10.2.0.0/25",
+          "AddressPrefix": "10.203.0.0/25",
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
         }
       ]
@@ -70,7 +70,7 @@
       "comments": "Creating Virtual Network with gateway and project subnets",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('virtualNetwork').Name]",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2015-06-15",
       "location": "[variables('location')]",
       "scale": null,
       "properties": {
@@ -79,7 +79,7 @@
             "[parameters('virtualNetwork').AddressPrefix]"
           ]
         },
-        "dhcpOptions": "[parameters('dhcpOptions')]" ,
+        "dhcpOptions": "[parameters('dhcpOptions')]",
         "copy": [
           {
             "name": "Subnets",
@@ -88,13 +88,11 @@
               "name": "[parameters('Subnets')[copyIndex('Subnets')].SubnetName]",
               "properties": {
                 "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].AddressPrefix]",
-                //Set NSG for GatewaySubnet in null
                 "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]"
               }
             }
           }
         ],
-        //        "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('copyvNetPeers'))]", //"[variables('virtualNetworkPeerings')]",
         "enableDdosProtection": false,
         "enableVmProtection": false,
         "virtualNetworkPeerings": "[if(equals(parameters('virtualNetworkPeeringsExist'),0),json('null'),variables('copyvNetPeerings'))]"
