@@ -33,7 +33,7 @@
       "comments": "Creating the NSG for the project",
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[parameters('nsgname')]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2017-06-01",
       "location": "[variables('location')]",
       "scale": null,
       "properties": {
