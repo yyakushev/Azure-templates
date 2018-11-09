@@ -45,7 +45,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-06-01",
       "name": "[concat('lb-',parameters('pipname'),'-linked-template')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
