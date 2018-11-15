@@ -100,7 +100,7 @@
           "createOption": "[parameters('dataDisks')[copyIndex('Disks')].createOption]",
           "diskSizeGB": "[parameters('dataDisks')[copyIndex('Disks')].diskSizeGB]",
           "vhd": {
-            "uri": "[concat('https://',variables('StorageName'),'.',parameters('coreBlobUri'),'/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
+            "uri": "[concat('https://',concat('storage', uniqueString(resourceGroup().id)),'.',parameters('coreBlobUri'),'/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
           }
         }
       }
