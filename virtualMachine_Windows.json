@@ -2,6 +2,10 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "coreBlobUri": {
+      "defaultValue": "blob.core.windows.net", 
+      "type": "string"
+    },
     "virtualNetwork": {
       "defaultValue": {
         "virtualNetworkName": "virtualNetwork"
@@ -15,8 +19,8 @@
           "namepreffix": "local",
           "SubnetName": "subnet",
           "privateIPAllocationMethod": "Dynamic",
-          "privateIPAddress": null, 
-          "publicIPAllocationMethod": "Dynamic", 
+          "privateIPAddress": null,
+          "publicIPAllocationMethod": "Dynamic",
           "publicIPAddress": "false",
           "loadBalancerInboundNatRules": null,
           "dnsServers": []
@@ -96,7 +100,7 @@
           "createOption": "[parameters('dataDisks')[copyIndex('Disks')].createOption]",
           "diskSizeGB": "[parameters('dataDisks')[copyIndex('Disks')].diskSizeGB]",
           "vhd": {
-            "uri": "[concat('https://',variables('StorageName'),'.blob.core.windows.net/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
+            "uri": "[concat('https://',variables('StorageName'),'.',parameters('coreBlobUri'),'/', variables('StorageAccountContainerName'), '/', concat(parameters('VMName'),'-',parameters('dataDisks')[copyIndex('Disks')].nameprefix,'.vhd'))]"
           }
         }
       }
