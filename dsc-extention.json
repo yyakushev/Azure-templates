@@ -39,6 +39,7 @@
         "type": "DSC",
         "typeHandlerVersion": "2.76",
         "autoUpgradeMinorVersion": true,
+        "upgradePolicy": {"mode": "Automatic"},
         "forceUpdateTag": "[parameters('configuration').DscUpdateTagVersion]",
         "settings": {
           "configuration": "[parameters('configuration')]",
