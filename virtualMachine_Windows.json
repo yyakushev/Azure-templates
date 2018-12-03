@@ -55,7 +55,8 @@
         "2012-Datacenter",
         "2012-R2-Datacenter",
         "Windows-Server-Technical-Preview",
-        "2016-Datacenter"
+        "2016-Datacenter",
+        "2019-Datacenter-Core"
       ]
     },
     "DataDisksExist": {
@@ -82,10 +83,6 @@
     "licenseType": {
       "type": "string",
       "defaultValue": "Windows_Server"
-    },
-    "availabilitySet": {
-      "type": "string",
-      "defaultValue": null
     }
   },
   "variables": {
@@ -204,7 +201,6 @@
           "adminUsername": "[parameters('AdminUsername')]",
           "adminPassword": "[parameters('AdminPassword')]"
         },
-        "availabilitySet": "parameters('availabilitySet')",
         "storageProfile": {
           "imageReference": {
             "publisher": "[variables('ImagePublisher')]",
