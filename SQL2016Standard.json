@@ -191,19 +191,7 @@
               "privateIPAllocationMethod": "Dynamic"
             }
           }
-        ],
-        "networkSecurityGroup": {
-          "id": "[resourceId('rg-sw365-aad-test', 'Microsoft.Network/networkSecurityGroups', parameters('nsgname'))]"
-        }
-      }
-    },
-    {
-      "name": "[parameters('nsgname')]",
-      "type": "Microsoft.Network/networkSecurityGroups",
-      "apiVersion": "2018-08-01",
-      "location": "[parameters('location')]",
-      "properties": {
-        "securityRules": []
+        ]
       }
     }
   ],
