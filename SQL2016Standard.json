@@ -59,7 +59,7 @@
     },
     "rServicesEnabled": {
       "type": "string",
-      "defaultValue": false
+      "defaultValue": "false"
     }
   },
   "variables": {
