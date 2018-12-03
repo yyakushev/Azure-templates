@@ -1,0 +1,216 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "VMName": {
+      "type": "string"
+    },
+    "VmSize": {
+      "type": "string"
+    },
+    "adminUsername": {
+      "type": "string"
+    },
+    "virtualNetworkName": {
+      "type": "string"
+    },
+    "nicname": {
+      "type": "string"
+    },
+    "nsgname": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    },
+    "subnetName": {
+      "type": "string"
+    },
+    "sqlConnectivityType": {
+      "type": "string"
+    },
+    "sqlPortNumber": {
+      "type": "int",
+      "defaultValue": "1433"
+    },
+    "sqlStorageDisksCount": {
+      "type": "int",
+      "defaultValue": "1"
+    },
+    "sqlStorageWorkloadType": {
+      "type": "string",
+      "defaultValue": "GENERAL"
+    },
+    "sqlStorageDisksConfigurationType": {
+      "type": "string",
+      "defaultValue": "NEW"
+    },
+    "sqlStorageStartingDeviceId": {
+      "type": "int",
+      "defaultValue": "2"
+    },
+    "sqlStorageDeploymentToken": {
+      "type": "int",
+      "defaultValue": "72830"
+    },
+    "rServicesEnabled": {
+      "type": "string",
+      "defaultValue": false
+    }
+  },
+  "variables": {
+    "vnetId": "[resourceId('rg-sw365-aad-test','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
+  },
+  "resources": [
+    {
+      "name": "[parameters('VMName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2018-06-01",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('nicname'))]"
+      ],
+      "properties": {
+        "osProfile": {
+          "computerName": "[parameters('VMName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "windowsConfiguration": {
+            "provisionVmAgent": "true"
+          }
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('VmSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftSQLServer",
+            "offer": "SQL2016SP2-WS2016",
+            "sku": "Standard",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "fromImage",
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            }
+          },
+          "dataDisks": [
+            {
+              "createOption": "empty",
+              "lun": 0,
+              "diskSizeGB": "1023",
+              "caching": "ReadOnly",
+              "managedDisk": {
+                "storageAccountType": "Premium_LRS"
+              }
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicname'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('VMName'), '/SqlIaasExtension')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VMName'))]",
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('VMName'))]"
+      ],
+      "properties": {
+        "type": "SqlIaaSAgent",
+        "publisher": "Microsoft.SqlServer.Management",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": "true",
+        "settings": {
+          "AutoTelemetrySettings": {
+            "Region": "[parameters('location')]"
+          },
+          "AutoPatchingSettings": {
+            "PatchCategory": "WindowsMandatoryUpdates",
+            "Enable": false,
+            "DayOfWeek": "Sunday",
+            "MaintenanceWindowStartingHour": "2",
+            "MaintenanceWindowDuration": "60"
+          },
+          "KeyVaultCredentialSettings": {
+            "Enable": false,
+            "CredentialName": ""
+          },
+          "ServerConfigurationsManagementSettings": {
+            "SQLConnectivityUpdateSettings": {
+              "ConnectivityType": "[parameters('sqlConnectivityType')]",
+              "Port": "[parameters('sqlPortNumber')]"
+            },
+            "SQLWorkloadTypeUpdateSettings": {
+              "SQLWorkloadType": "[parameters('sqlStorageWorkloadType')]"
+            },
+            "SQLStorageUpdateSettings": {
+              "DiskCount": "[parameters('sqlStorageDisksCount')]",
+              "NumberOfColumns": "[parameters('sqlStorageDisksCount')]",
+              "StartingDeviceID": "[parameters('sqlStorageStartingDeviceId')]",
+              "DiskConfigurationType": "[parameters('sqlStorageDisksConfigurationType')]"
+            },
+            "AdditionalFeaturesServerConfigurations": {
+              "IsRServicesEnabled": "[parameters('rServicesEnabled')]"
+            }
+          }
+        },
+        "protectedSettings": {}
+      }
+    },
+    {
+      "name": "[parameters('nicname')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2018-04-01",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkSecurityGroups/', parameters('nsgname'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              },
+              "privateIPAllocationMethod": "Dynamic"
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('rg-sw365-aad-test', 'Microsoft.Network/networkSecurityGroups', parameters('nsgname'))]"
+        }
+      }
+    },
+    {
+      "name": "[parameters('nsgname')]",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2018-08-01",
+      "location": "[parameters('location')]",
+      "properties": {
+        "securityRules": []
+      }
+    }
+  ],
+  "outputs": {
+    "adminUsername": {
+      "type": "string",
+      "value": "[parameters('adminUsername')]"
+    }
+  }
+}

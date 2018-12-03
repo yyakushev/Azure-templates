@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "coreBlobUri": {
-      "defaultValue": "blob.core.windows.net", 
+      "defaultValue": "blob.core.windows.net",
       "type": "string"
     },
     "virtualNetwork": {
@@ -82,6 +82,10 @@
     "licenseType": {
       "type": "string",
       "defaultValue": "Windows_Server"
+    },
+    "availabilitySet": {
+      "type": "string",
+      "defaultValue": null
     }
   },
   "variables": {
@@ -200,6 +204,7 @@
           "adminUsername": "[parameters('AdminUsername')]",
           "adminPassword": "[parameters('AdminPassword')]"
         },
+        "availabilitySet": "parameters('availabilitySet')",
         "storageProfile": {
           "imageReference": {
             "publisher": "[variables('ImagePublisher')]",

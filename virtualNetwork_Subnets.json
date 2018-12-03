@@ -21,12 +21,14 @@
         {
           "SubnetName": "GatewaySubnet",
           "AddressPrefix": "10.203.0.224/27",
-          "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
+          "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]",
+          "serviceEndpoints": []
         },
         {
           "SubnetName": "[concat('subnet-','01')]",
           "AddressPrefix": "10.203.0.0/25",
-          "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]"
+          "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]",
+          "serviceEndpoints": []
         }
       ]
     },
@@ -88,7 +90,8 @@
               "name": "[parameters('Subnets')[copyIndex('Subnets')].SubnetName]",
               "properties": {
                 "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].AddressPrefix]",
-                "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]"
+                "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]",
+                "serviceEndpoints": "[parameters('Subnets').serviceEndpoints]"
               }
             }
           }
