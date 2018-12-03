@@ -35,11 +35,11 @@
     },
     "sqlPortNumber": {
       "type": "int",
-      "defaultValue": "1433"
+      "defaultValue": 1433
     },
     "sqlStorageDisksCount": {
       "type": "int",
-      "defaultValue": "1"
+      "defaultValue": 1
     },
     "sqlStorageWorkloadType": {
       "type": "string",
@@ -51,11 +51,11 @@
     },
     "sqlStorageStartingDeviceId": {
       "type": "int",
-      "defaultValue": "2"
+      "defaultValue": 2
     },
     "sqlStorageDeploymentToken": {
       "type": "int",
-      "defaultValue": "72830"
+      "defaultValue": 72830
     },
     "rServicesEnabled": {
       "type": "string",
