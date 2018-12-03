@@ -91,7 +91,7 @@
               "properties": {
                 "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].AddressPrefix]",
                 "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]",
-                "serviceEndpoints": "[parameters('Subnets').serviceEndpoints]"
+                "serviceEndpoints": "[parameters('Subnets')[copyIndex('Subnets')].serviceEndpoints]"
               }
             }
           }
