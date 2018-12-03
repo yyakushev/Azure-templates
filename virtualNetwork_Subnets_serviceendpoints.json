@@ -22,11 +22,13 @@
           "SubnetName": "GatewaySubnet",
           "AddressPrefix": "10.203.0.224/27",
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]",
+          "serviceEndpoints": []
         },
         {
           "SubnetName": "[concat('subnet-','01')]",
           "AddressPrefix": "10.203.0.0/25",
           "nsgname": "[concat(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'-nsg')]",
+          "serviceEndpoints": []
         }
       ]
     },
@@ -70,7 +72,7 @@
       "comments": "Creating Virtual Network with gateway and project subnets",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('virtualNetwork').Name]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2016-12-01",
       "location": "[variables('location')]",
       "scale": null,
       "properties": {
@@ -89,6 +91,7 @@
               "properties": {
                 "addressPrefix": "[parameters('Subnets')[copyIndex('Subnets')].AddressPrefix]",
                 "networkSecurityGroup": "[if(equals(parameters('Subnets')[copyIndex('Subnets')].SubnetName,'GatewaySubnet'),json('null'),json(concat('{\"id\": \"',resourceId('Microsoft.Network/networkSecurityGroups', parameters('Subnets')[copyIndex('Subnets')].nsgname),'\"}')) )]",
+                "serviceEndpoints": "[parameters('Subnets')[copyIndex('Subnets')].serviceEndpoints]"
               }
             }
           }
