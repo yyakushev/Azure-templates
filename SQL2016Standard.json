@@ -62,10 +62,6 @@
       "defaultValue": "false"
     }
   },
-  "variables": {
-    "vnetId": "[resourceId('rg-sw365-aad-test','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
-  },
   "resources": [
     {
       "name": "[parameters('VMName')]",
@@ -177,9 +173,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2018-04-01",
       "location": "[parameters('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkSecurityGroups/', parameters('nsgname'))]"
-      ],
+      "dependsOn": [],
       "properties": {
         "ipConfigurations": [
           {
