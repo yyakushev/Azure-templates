@@ -131,9 +131,8 @@
         {
           "condition": "[parameters('enableNetworkRules')]",
           "type": "virtualNetworkRules",
-          "name": "[concat(parameters('serverName'), '/', parameters('virtualNetworkRules').name)]",
+          "name": "[parameters('virtualNetworkRules').name]",
           "apiVersion": "2015-05-01-preview",
-          "scale": null,
           "properties": {
             "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkRules').virtualNetworkName, parameters('virtualNetworkRules').SubnetName)]",
             "ignoreMissingVnetServiceEndpoint": false
