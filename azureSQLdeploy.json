@@ -134,7 +134,7 @@
           "name": "[parameters('virtualNetworkRules').name]",
           "apiVersion": "2015-05-01-preview",
           "properties": {
-            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkRules').virtualNetworkName, parameters('virtualNetworkRules').SubnetName)]",
+            "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkRules').virtualNetworkName, parameters('virtualNetworkRules').SubnetName)]",
             "ignoreMissingVnetServiceEndpoint": false
           },
           "dependsOn": [
