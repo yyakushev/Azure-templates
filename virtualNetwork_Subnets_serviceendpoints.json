@@ -72,7 +72,7 @@
       "comments": "Creating Virtual Network with gateway and project subnets",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('virtualNetwork').Name]",
-      "apiVersion": "2016-12-01",
+      "apiVersion": "2018-08-01",
       "location": "[variables('location')]",
       "scale": null,
       "properties": {
