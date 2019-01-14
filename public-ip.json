@@ -13,6 +13,13 @@
         "Dynamic",
         "Static"
       ]
+    },
+    "dnsSettings": {
+      "type": "object",
+      "defaultValue": {
+        "domainNameLabel": "[parameters('pipname')]",
+        "fqdn": "[concat(parameters('pipname'),'.westeurope.cloudapp.azure.com')]"
+      }
     }
   },
   "variables": {
@@ -34,7 +41,8 @@
         "publicIPAddressVersion": "IPv4",
         "publicIPAllocationMethod": "[parameters('publicIPAllocationMethod')]",
         "idleTimeoutInMinutes": 4,
-        "ipTags": []
+        "ipTags": [],
+        "dnsSettings": "[parameters('dnsSettings')]"
       },
       "dependsOn": []
     }
